@@ -1,26 +1,38 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-ivory: #faf7f2;
+  --color-ink: #3d3a36;
+  --color-muted: #8c857e;
+  --color-accent: #b0896b;
+  --color-night: #1c1b33;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* 도트 스프라이트 2프레임 순환 (PixelSprite) */
+  --animate-walk: walk 0.36s steps(2) infinite;
+  --animate-twinkle: twinkle 1.6s steps(2) infinite;
+  --animate-petal: petal 5s linear infinite;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @keyframes walk {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes twinkle {
+    50% {
+      opacity: 0.2;
+    }
+  }
+
+  @keyframes petal {
+    to {
+      transform: translate(40px, 100dvh) rotate(360deg);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --font-sans: var(--font-noto-sans-kr), sans-serif;
+  --font-serif: var(--font-gowun-batang), serif;
+  --font-pixel: var(--font-dotgothic), monospace;
 }
