@@ -153,6 +153,12 @@ function IntroSequence() {
   // 인트로 동안 뒤의 청첩장 스크롤 잠금
   useScrollLock();
 
+  // 새로고침 시 브라우저가 이전 스크롤 위치를 되살리면 인트로가 끝난 뒤 중간·맨 아래부터 보이므로 항상 맨 위에서 시작
+  useEffect(() => {
+    history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+  }, []);
+
   const walking = phase === "walk" || phase === "enter";
 
   return (
