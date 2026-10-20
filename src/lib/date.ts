@@ -1,4 +1,4 @@
-import { wedding } from "@/data/wedding";
+import { type SimpleDate, wedding } from "@/data/wedding";
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -33,15 +33,36 @@ export function daysUntilWedding(now = Date.now()) {
   return Math.round((Date.UTC(year, month - 1, day) - kstToday(now)) / DAY_MS);
 }
 
+/** 예식 시작까지 남은 밀리초 (예식 시각은 KST) */
+export function msUntilWedding(now = Date.now()) {
+  return Date.UTC(year, month - 1, day, hour, minute) - KST_OFFSET_MS - now;
+}
+
+const toUtc = (date: SimpleDate) => Date.UTC(date.year, date.month - 1, date.day);
+const FIRST_DAY_UTC = toUtc(wedding.firstDay);
+
+/** 처음 만난 날을 1일로 셌을 때 해당 날짜가 며칠째인지 */
+export function dayNumberOf(date: SimpleDate) {
+  return Math.round((toUtc(date) - FIRST_DAY_UTC) / DAY_MS) + 1;
+}
+
+/** 처음 만난 날을 1일로 센 n일째 날짜 */
+export function dateOfDayNumber(n: number): SimpleDate {
+  const date = new Date(FIRST_DAY_UTC + (n - 1) * DAY_MS);
+  return { year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() };
+}
+
 /** 처음 만난 날을 1일로 센 오늘(KST)까지의 날수 */
 export function daysTogether(now = Date.now()) {
-  const first = wedding.firstDay;
-  return Math.round((kstToday(now) - Date.UTC(first.year, first.month - 1, first.day)) / DAY_MS) + 1;
+  return Math.round((kstToday(now) - FIRST_DAY_UTC) / DAY_MS) + 1;
+}
+
+export function formatDots(date: SimpleDate) {
+  return `${date.year}.${pad(date.month)}.${pad(date.day)}`;
 }
 
 export function formatFirstDayDots() {
-  const first = wedding.firstDay;
-  return `${first.year}.${pad(first.month)}.${pad(first.day)}`;
+  return formatDots(wedding.firstDay);
 }
 
 export function formatTodayDots(now = Date.now()) {

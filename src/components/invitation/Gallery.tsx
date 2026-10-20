@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
+import { Icon } from "@/components/common/Icon";
 import { Section } from "@/components/common/Section";
 import { wedding } from "@/data/wedding";
 
@@ -13,8 +14,8 @@ function Photo({ index, sizes }: { index: number; sizes: string }) {
   const src = wedding.gallery[index];
   if (!src) {
     return (
-      <div className="flex size-full items-center justify-center bg-stone-200 text-xs text-stone-400">
-        PHOTO {index + 1}
+      <div className="flex size-full items-center justify-center bg-[#e8e1d6] font-display text-xs text-muted italic lining-nums">
+        {String(index + 1).padStart(2, "0")}
       </div>
     );
   }
@@ -30,7 +31,7 @@ export function Gallery() {
 
   return (
     <Section eyebrow="Gallery" title="우리의 순간">
-      <div className="grid grid-cols-3 gap-1">
+      <div className="-mx-4 grid grid-cols-3 gap-0.5">
         {Array.from({ length: count }, (_, i) => (
           <button
             key={i}
@@ -52,11 +53,11 @@ export function Gallery() {
             exit={{ opacity: 0 }}
           >
             <div className="flex items-center justify-between px-4 py-3 text-sm text-white/80">
-              <span>
-                {openIndex + 1} / {count}
+              <span className="font-display tracking-widest lining-nums">
+                {String(openIndex + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
               </span>
-              <button type="button" onClick={() => setOpenIndex(null)} className="px-2 py-1 text-lg">
-                ✕
+              <button type="button" onClick={() => setOpenIndex(null)} aria-label="닫기" className="-mr-2 p-2">
+                <Icon name="close" className="size-5" />
               </button>
             </div>
             <motion.div
@@ -73,12 +74,12 @@ export function Gallery() {
             >
               <Photo index={openIndex} sizes="480px" />
             </motion.div>
-            <div className="flex justify-between px-6 py-4 text-2xl text-white/70">
-              <button type="button" onClick={() => move(-1)} aria-label="이전 사진">
-                ‹
+            <div className="flex justify-between px-4 py-4 text-white/70">
+              <button type="button" onClick={() => move(-1)} aria-label="이전 사진" className="p-2">
+                <Icon name="chevronLeft" className="size-6" />
               </button>
-              <button type="button" onClick={() => move(1)} aria-label="다음 사진">
-                ›
+              <button type="button" onClick={() => move(1)} aria-label="다음 사진" className="p-2">
+                <Icon name="chevronRight" className="size-6" />
               </button>
             </div>
           </motion.div>

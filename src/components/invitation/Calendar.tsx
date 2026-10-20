@@ -3,6 +3,8 @@
 import { useSyncExternalStore } from "react";
 import { Section } from "@/components/common/Section";
 import { wedding } from "@/data/wedding";
+import { Countdown } from "./Countdown";
+import { EasterEgg } from "./EasterEgg";
 import { daysUntilWedding, formatWeddingDate, WEEKDAYS, weddingMonthCells } from "@/lib/date";
 
 const noopSubscribe = () => () => {};
@@ -13,7 +15,11 @@ function DdayText() {
   if (days === null) return null;
 
   const { groom, bride } = wedding;
-  const names = `${groom.name.slice(1)} ♥ ${bride.name.slice(1)}`;
+  const names = (
+    <>
+      {groom.name.slice(1)} <EasterEgg className="text-rose-400">♥</EasterEgg> {bride.name.slice(1)}
+    </>
+  );
   if (days > 0) {
     return (
       <>
@@ -30,10 +36,10 @@ export function Calendar() {
 
   return (
     <Section eyebrow="Wedding Day" title={`${year}년 ${month}월`}>
-      <p className="-mt-6 mb-8 text-center text-sm text-muted">{formatWeddingDate()}</p>
-      <div className="grid grid-cols-7 gap-y-3 border-y border-stone-200 py-6 text-center text-sm">
+      <p className="-mt-6 mb-10 text-center text-[13px] text-muted">{formatWeddingDate()}</p>
+      <div className="grid grid-cols-7 gap-y-3 border-y border-line py-7 text-center text-[13px]">
         {WEEKDAYS.map((weekday, i) => (
-          <span key={weekday} className={i === 0 ? "text-rose-400" : "text-muted"}>
+          <span key={weekday} className={`pb-2 text-xs ${i === 0 ? "text-rose-400/80" : "text-muted"}`}>
             {weekday}
           </span>
         ))}
@@ -42,7 +48,7 @@ export function Calendar() {
             {date && (
               <span
                 className={`flex size-8 items-center justify-center rounded-full ${
-                  date === day ? "bg-accent text-white" : i % 7 === 0 ? "text-rose-400" : "text-ink"
+                  date === day ? "bg-accent font-medium text-white" : i % 7 === 0 ? "text-rose-400/80" : "text-ink"
                 }`}
               >
                 {date}
@@ -51,7 +57,8 @@ export function Calendar() {
           </span>
         ))}
       </div>
-      <p className="mt-8 min-h-6 text-center text-sm text-ink">
+      <Countdown />
+      <p className="mt-8 min-h-6 text-center text-[13px] text-ink">
         <DdayText />
       </p>
     </Section>

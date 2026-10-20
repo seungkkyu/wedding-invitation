@@ -3,21 +3,14 @@
 import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/react";
 import { useEffect } from "react";
 import { daysTogether, formatFirstDayDots, formatTodayDots, formatWeddingDateDots } from "@/lib/date";
+import { useScrollLock } from "@/hooks/useScrollLock";
 import { useIntroStore } from "@/store/introStore";
 import { PalaceDoor } from "./PalaceDoor";
 import { PalaceFloor } from "./PalaceFloor";
-import { PixelSprite } from "./PixelSprite";
 import { Ring } from "./Ring";
-import {
-  BRIDE_FRAMES,
-  BRIDE_PALETTE,
-  BUSH_FRAMES,
-  BUSH_PALETTE,
-  GROOM_FRAMES,
-  GROOM_PALETTE,
-  HEART_FRAMES,
-  HEART_PALETTE,
-} from "./sprites";
+import { Bride, Groom } from "@/components/pixel/Characters";
+import { PixelSprite } from "@/components/pixel/PixelSprite";
+import { BUSH_FRAMES, BUSH_PALETTE, HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 
 const STARS = [
   { top: "8%", left: "12%" },
@@ -158,13 +151,7 @@ function IntroSequence() {
   }, [animate, reduceMotion, scope, setPhase, skip]);
 
   // 인트로 동안 뒤의 청첩장 스크롤 잠금
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
-    };
-  }, []);
+  useScrollLock();
 
   const walking = phase === "walk" || phase === "enter";
 
@@ -250,10 +237,10 @@ function IntroSequence() {
 
         {/* 신랑·신부 (시작 위치는 화면 밖) */}
         <div data-intro="groom" className="absolute bottom-[28%] left-1/2 z-10 -ml-7.5" style={{ transform: "translateX(-240px)" }}>
-          <PixelSprite frames={GROOM_FRAMES} palette={GROOM_PALETTE} animated={walking} className="h-20 w-15" />
+          <Groom walking={walking} />
         </div>
         <div data-intro="bride" className="absolute bottom-[28%] left-1/2 z-10 -ml-7.5" style={{ transform: "translateX(240px)" }}>
-          <PixelSprite frames={BRIDE_FRAMES} palette={BRIDE_PALETTE} animated={walking} className="h-20 w-15" />
+          <Bride walking={walking} />
         </div>
 
         {/* 반지 */}

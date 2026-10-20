@@ -1,6 +1,7 @@
 "use client";
 
 import { useCopy } from "@/hooks/useCopy";
+import { Icon } from "./Icon";
 
 type CopyButtonProps = {
   text: string;
@@ -15,8 +16,9 @@ export function CopyButton({ text, label = "복사", className = "" }: CopyButto
     <button
       type="button"
       onClick={() => copy(text)}
-      className={`shrink-0 rounded-md border border-stone-300 px-2.5 py-1 text-xs text-ink transition-colors active:bg-stone-100 ${className}`}
+      className={`inline-flex shrink-0 items-center gap-1 text-xs text-accent transition-opacity active:opacity-60 ${className}`}
     >
+      <Icon name="copy" className="size-3.5" />
       {copied ? "복사됨" : label}
     </button>
   );

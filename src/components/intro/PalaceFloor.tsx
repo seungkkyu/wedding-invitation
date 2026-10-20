@@ -1,5 +1,5 @@
-import { PixelSprite } from "./PixelSprite";
-import { LAMP_FRAMES, LAMP_PALETTE } from "./sprites";
+import { PixelSprite } from "@/components/pixel/PixelSprite";
+import { LAMP_FRAMES, LAMP_PALETTE } from "@/components/pixel/sprites";
 
 // 바닥에 흩어진 꽃잎 (바닥 영역 기준 위치)
 const FALLEN_PETALS = [

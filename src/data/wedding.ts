@@ -10,6 +10,26 @@ export type Person = {
   motherPhone: string;
 };
 
+export type SimpleDate = { year: number; month: number; day: number };
+
+export type StoryMoment = {
+  date: SimpleDate;
+  title: string;
+  text: string;
+  /** public/ 기준 사진 경로 (예: "/images/story/first-day.jpg"). 없으면 플레이스홀더 */
+  photo?: string;
+};
+
+/** 시기별 캐릭터 의상 */
+export type Outfit = "student" | "office" | "wedding";
+
+export type StoryChapter = {
+  /** 이 연도까지의 순간이 이 챕터에 속한다. 마지막 챕터는 생략 */
+  until?: number;
+  outfit: Outfit;
+  title: string;
+};
+
 export type BankAccount = {
   holder: string;
   bank: string;
@@ -37,7 +57,20 @@ export const wedding = {
   } satisfies Person,
   date: { year: 2027, month: 5, day: 15, hour: 12, minute: 30 },
   // 처음 만난 날. 인트로에서 이 날을 1일로 함께한 날수를 센다.
-  firstDay: { year: 2015, month: 7, day: 18 },
+  firstDay: { year: 2015, month: 7, day: 18 } satisfies SimpleDate,
+  // 스토리 타임라인의 순간들 (현재는 임시 내용). 1,000일 단위 기념일과 예식일은 자동으로 끼워 넣는다.
+  story: [
+    { date: { year: 2015, month: 7, day: 18 }, title: "처음 만난 날", text: "(임시) 그날의 첫인상을 적어주세요." },
+    { date: { year: 2016, month: 8, day: 12 }, title: "첫 여행", text: "(임시) 함께 떠난 첫 여행의 기억." },
+    { date: { year: 2020, month: 12, day: 24 }, title: "함께한 겨울", text: "(임시) 오래 기억하고 싶은 순간." },
+    { date: { year: 2026, month: 3, day: 14 }, title: "프로포즈", text: "(임시) 평생을 약속한 날." },
+  ] satisfies StoryMoment[],
+  // 스토리 챕터. 캐릭터가 챕터에 들어서면 의상이 바뀐다. (제목은 임시)
+  storyChapters: [
+    { until: 2018, outfit: "student", title: "교복을 입던 우리" },
+    { until: 2025, outfit: "office", title: "같은 퇴근길" },
+    { outfit: "wedding", title: "그리고, 평생" },
+  ] satisfies StoryChapter[],
   venue: {
     name: "OO웨딩홀",
     hall: "3층 그랜드홀",
