@@ -101,6 +101,13 @@ export const wedding = {
       { holder: "최어머니", bank: "OO은행", number: "000-0000-0000-00" },
     ] satisfies BankAccount[],
   },
+  // 신혼여행 탑승권과 출국 장면 (현재는 임시 내용)
+  honeymoon: {
+    from: { code: "ICN", city: "Seoul" },
+    to: { code: "HNL", city: "Honolulu", name: "하와이", greeting: "ALOHA!" },
+    date: { year: 2027, month: 5, day: 16 } satisfies SimpleDate,
+    flight: "LV 0515",
+  },
   // 사진 경로 (public/images/...). 비어 있으면 갤러리에 플레이스홀더가 표시된다.
   gallery: [] as string[],
 };

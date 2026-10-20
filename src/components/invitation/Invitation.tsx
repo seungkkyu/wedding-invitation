@@ -3,6 +3,7 @@ import { Bgm } from "./Bgm";
 import { Calendar } from "./Calendar";
 import { Contact } from "./Contact";
 import { Cover } from "./Cover";
+import { Farewell } from "./Farewell";
 import { Gallery } from "./Gallery";
 import { Greeting } from "./Greeting";
 import { Location } from "./Location";
@@ -19,6 +20,7 @@ export function Invitation() {
       <Location />
       <Contact />
       <Account />
+      <Farewell />
       <Share />
       <Bgm />
       {/* 하단 플로팅 버튼 + 전체화면 시트 */}

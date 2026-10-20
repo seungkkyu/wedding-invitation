@@ -223,3 +223,56 @@ export const SPEAKER_OFF_FRAMES = [
   ["...c....", "..cc....", "cccc.c.c", "cccc..c.", "cccc.c.c", "..cc....", "...c...."],
 ];
 export const SPEAKER_PALETTE = { c: "currentColor" };
+
+// ── 신혼여행 출국 장면 ──
+
+// 옆에서 본 비행기 (26x10, 오른쪽을 향함)
+export const PLANE_FRAMES = [
+  [
+    "rr........................",
+    "rrr.......................",
+    "rrrr......................",
+    ".gwwwwwwwwwwwwwwwwwwwww...",
+    "gwwwbwbwbwbwbwbwbwbwwbbww.",
+    "gwwwwwwwwwwwwwwwwwwwwwwwww",
+    "gsssssssssssssssssssssssw.",
+    ".ggggggggggggggggggggggg..",
+    "........ggggggg...........",
+    ".........kk...............",
+  ],
+];
+
+export const PLANE_PALETTE = {
+  r: "#e5577a",
+  w: "#ffffff",
+  g: "#c9cdd8",
+  b: "#4a6fa5",
+  s: "#5aa0e0",
+  k: "#3b3a4a",
+};
+
+// 야자수 (11x13)
+export const PALM_FRAMES = [
+  [
+    "..gg...gg..",
+    ".gggg.gggg.",
+    "gg..ggg..gg",
+    "g...gcg...g",
+    ".....t.....",
+    ".....t.....",
+    "....t......",
+    "....t......",
+    "....t......",
+    ".....t.....",
+    ".....t.....",
+    ".....t.....",
+    "....ttt....",
+  ],
+];
+
+export const PALM_PALETTE = { g: "#3f8a55", c: "#8a5a3a", t: "#8a5a3a" };
+
+// 구름 (12x4)
+export const CLOUD_FRAMES = [["....wwww....", "..wwwwwwww..", ".wwwwwwwwwww", "wwwwwwwwwwww"]];
+
+export const CLOUD_PALETTE = { w: "#ffffff" };
