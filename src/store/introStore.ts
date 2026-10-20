@@ -5,6 +5,7 @@ import { create } from "zustand";
  * 여기엔 화면 상태(걷기 모션, 문 열림 등)를 바꾸는 데 필요한 단계만 둔다.
  */
 export type IntroPhase =
+  | "count" // 함께한 날수 카운트
   | "ring" // 반지 회전·낙하, 궁전 등장
   | "walk" // 신랑·신부가 걸어옴
   | "enter" // 문이 열리고 들어감
@@ -19,8 +20,8 @@ type IntroState = {
 };
 
 export const useIntroStore = create<IntroState>()((set) => ({
-  phase: "ring",
+  phase: "count",
   setPhase: (phase) => set({ phase }),
   skip: () => set({ phase: "done" }),
-  replay: () => set({ phase: "ring" }),
+  replay: () => set({ phase: "count" }),
 }));

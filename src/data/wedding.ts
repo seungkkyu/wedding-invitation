@@ -36,6 +36,8 @@ export const wedding = {
     motherPhone: "010-0000-0000",
   } satisfies Person,
   date: { year: 2027, month: 5, day: 15, hour: 12, minute: 30 },
+  // 처음 만난 날. 인트로에서 이 날을 1일로 함께한 날수를 센다.
+  firstDay: { year: 2015, month: 7, day: 18 },
   venue: {
     name: "OO웨딩홀",
     hall: "3층 그랜드홀",

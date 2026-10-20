@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DotGothic16, Gowun_Batang, Noto_Sans_KR } from "next/font/google";
+import { Bodoni_Moda, DotGothic16, Gowun_Batang, Noto_Sans_KR } from "next/font/google";
 import { wedding } from "@/data/wedding";
 import { formatWeddingDate } from "@/lib/date";
 import "./globals.css";
@@ -21,6 +21,11 @@ const dotGothic = DotGothic16({
   subsets: ["latin"],
 });
 
+const bodoniModa = Bodoni_Moda({
+  variable: "--font-bodoni",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: `${wedding.groom.name} ♥ ${wedding.bride.name} 결혼합니다`,
   description: `${formatWeddingDate()} ${wedding.venue.name}`,
@@ -33,7 +38,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${notoSansKr.variable} ${gowunBatang.variable} ${dotGothic.variable} antialiased`}>
+    <html lang="ko" className={`${notoSansKr.variable} ${gowunBatang.variable} ${dotGothic.variable} ${bodoniModa.variable} antialiased`}>
       <body className="bg-stone-200 font-sans text-ink">{children}</body>
     </html>
   );

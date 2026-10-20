@@ -90,3 +90,37 @@ export const BUSH_PALETTE = {
   r: "#e5577a",
   y: "#ffd76a",
 };
+
+// 바닥 양옆 등불 (7x20)
+export const LAMP_FRAMES = [
+  [
+    "...G...",
+    "..GGG..",
+    ".GGGGG.",
+    ".GlylG.",
+    ".GyfyG.",
+    ".GlylG.",
+    ".GGGGG.",
+    "..GgG..",
+    "...g...",
+    "...g...",
+    "...G...",
+    "...g...",
+    "...g...",
+    "...G...",
+    "...g...",
+    "...g...",
+    "..GgG..",
+    "..ggg..",
+    ".GGGGG.",
+    "GGGGGGG",
+  ],
+];
+
+export const LAMP_PALETTE = {
+  G: "#b8893a",
+  g: "#e2b85c",
+  l: "#fff3c4",
+  y: "#ffd76a",
+  f: "#ff9b3d",
+};

@@ -2,9 +2,10 @@
 
 import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/react";
 import { useEffect } from "react";
-import { formatWeddingDateDots } from "@/lib/date";
+import { daysTogether, formatFirstDayDots, formatTodayDots, formatWeddingDateDots } from "@/lib/date";
 import { useIntroStore } from "@/store/introStore";
 import { PalaceDoor } from "./PalaceDoor";
+import { PalaceFloor } from "./PalaceFloor";
 import { PixelSprite } from "./PixelSprite";
 import { Ring } from "./Ring";
 import {
@@ -39,7 +40,11 @@ const PETALS = [
 ];
 
 // 시퀀스가 어딘가에서 멈춰도 청첩장으로 넘어가도록 하는 안전장치
-const SAFETY_TIMEOUT_MS = 15000;
+const SAFETY_TIMEOUT_MS = 22000;
+
+// 날수 카운트: 처음엔 빠르게 올라가다 마지막 숫자들은 천천히 (easeOutQuint)
+const COUNT_DURATION = 3.2;
+const COUNT_EASE = [0.22, 1, 0.36, 1] as const;
 
 class Cancelled extends Error {}
 
@@ -69,6 +74,29 @@ function IntroSequence() {
     const el = (name: string) => `[data-intro="${name}"]`;
 
     const run = async () => {
+      // 0. 함께한 날수 1 → 오늘까지 카운트
+      // 오늘 날짜는 프리렌더 시점이 아닌 접속 시점 기준이어야 해서 클라이언트에서 채운다
+      const counter = scope.current.querySelector(el("count-number"));
+      const todayLabel = scope.current.querySelector(el("count-today-date"));
+      if (todayLabel) todayLabel.textContent = formatTodayDots();
+      const total = daysTogether();
+      await animate(el("count"), { opacity: [0, 1], y: [12, 0] }, { duration: 0.8 });
+      guard();
+      animate(el("count-line"), { scaleX: [0, 1] }, { duration: COUNT_DURATION, ease: COUNT_EASE });
+      await animate(1, total, {
+        duration: COUNT_DURATION,
+        ease: COUNT_EASE,
+        onUpdate: (value) => {
+          if (counter) counter.textContent = Math.round(value).toLocaleString("ko-KR");
+        },
+      });
+      guard();
+      animate(el("count-today"), { opacity: [0, 1] }, { duration: 0.6 });
+      await animate(el("count-number"), { scale: [1, 1.12, 1] }, { duration: 0.6, ease: "easeOut" });
+      await animate(el("count"), { opacity: 0, y: -16, filter: "blur(6px)" }, { duration: 0.7, delay: 0.9 });
+      guard();
+      setPhase("ring");
+
       // 1. 반지 회전
       await animate(el("ring"), { opacity: [0, 1], scale: [0.6, 1], rotateY: [0, 720] }, { duration: 1.5, ease: "easeInOut" });
       guard();
@@ -166,6 +194,28 @@ function IntroSequence() {
           ))}
         </div>
 
+        {/* 함께한 날수 */}
+        <div
+          data-intro="count"
+          className="absolute inset-x-0 top-[30%] flex flex-col items-center text-center text-white opacity-0"
+        >
+          <p className="font-display text-base font-medium tracking-[0.35em] text-pink-100 lining-nums">
+            SINCE {formatFirstDayDots()}
+          </p>
+          <p className="mt-3 font-serif text-xl text-white">우리가 함께한 시간</p>
+          <span
+            data-intro="count-number"
+            className="mt-5 inline-block bg-linear-to-b from-[#fffaea] via-[#f5d88a] to-[#c0913a] bg-clip-text font-display text-[5.5rem] leading-none font-medium text-transparent lining-nums tabular-nums drop-shadow-[0_0_22px_rgba(255,214,130,0.5)]"
+          >
+            1
+          </span>
+          <p className="mt-3 font-display text-sm font-medium tracking-[0.6em] text-[#f5d88a]">DAYS</p>
+          <span data-intro="count-line" className="mt-4 h-px w-48 origin-left bg-linear-to-r from-transparent via-[#f5d88a] to-transparent" />
+          <p data-intro="count-today" className="mt-4 font-display text-base tracking-[0.3em] text-white/85 lining-nums opacity-0">
+            TODAY · <span data-intro="count-today-date" />
+          </p>
+        </div>
+
         {/* 문구 */}
         <div data-intro="caption" className="absolute inset-x-0 top-[14%] text-center font-pixel text-white opacity-0">
           <p className="text-lg tracking-widest">WE&apos;RE GETTING MARRIED</p>
@@ -173,10 +223,9 @@ function IntroSequence() {
         </div>
 
         {/* 바닥 */}
-        <div
-          data-intro="floor"
-          className="absolute inset-x-0 bottom-0 h-[28%] border-t-4 border-[#6a5a8c] bg-[repeating-linear-gradient(90deg,#3a3157_0_16px,#332a4d_16px_32px)] opacity-0"
-        />
+        <div data-intro="floor" className="absolute inset-x-0 bottom-0 h-[28%] opacity-0">
+          <PalaceFloor lit={phase === "enter"} />
+        </div>
 
         {/* 궁전 문 + 꽃덤불 + 새어 나오는 빛 */}
         <div data-intro="palace" className="absolute bottom-[28%] left-1/2 origin-bottom -translate-x-1/2 opacity-0">
@@ -210,7 +259,7 @@ function IntroSequence() {
         {/* 반지 */}
         <div
           data-intro="ring"
-          className="absolute top-[30%] left-1/2 -ml-10 size-20 opacity-0 drop-shadow-[0_0_14px_rgba(255,226,150,0.75)]"
+          className="absolute top-[30%] left-1/2 -ml-12 size-24 opacity-0 drop-shadow-[0_0_14px_rgba(255,226,150,0.75)]"
         >
           <Ring className="size-full" />
         </div>
