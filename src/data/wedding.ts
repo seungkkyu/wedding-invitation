@@ -18,7 +18,7 @@ export type BankAccount = {
 
 export const wedding = {
   groom: {
-    name: "김신랑",
+    name: "박승규",
     order: "장남",
     father: "김아버지",
     mother: "박어머니",
@@ -27,7 +27,7 @@ export const wedding = {
     motherPhone: "010-0000-0000",
   } satisfies Person,
   bride: {
-    name: "이신부",
+    name: "박정은",
     order: "장녀",
     father: "이아버지",
     mother: "최어머니",
@@ -56,12 +56,12 @@ export const wedding = {
   ],
   accounts: {
     groom: [
-      { holder: "김신랑", bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: "박승규", bank: "OO은행", number: "000-0000-0000-00" },
       { holder: "김아버지", bank: "OO은행", number: "000-0000-0000-00" },
       { holder: "박어머니", bank: "OO은행", number: "000-0000-0000-00" },
     ] satisfies BankAccount[],
     bride: [
-      { holder: "이신부", bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: "박정은", bank: "OO은행", number: "000-0000-0000-00" },
       { holder: "이아버지", bank: "OO은행", number: "000-0000-0000-00" },
       { holder: "최어머니", bank: "OO은행", number: "000-0000-0000-00" },
     ] satisfies BankAccount[],
