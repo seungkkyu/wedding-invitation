@@ -1,7 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Bodoni_Moda, Gowun_Batang, Noto_Sans_KR } from "next/font/google";
+import {
+  Bebas_Neue,
+  Bodoni_Moda,
+  Caveat,
+  Cormorant_Garamond,
+  Courier_Prime,
+  Gowun_Batang,
+  Nanum_Myeongjo,
+  Nanum_Pen_Script,
+  Noto_Sans_KR,
+  Pinyon_Script,
+} from "next/font/google";
 import localFont from "next/font/local";
-import { wedding } from "@/data/wedding";
+import { ImageGuard } from "@/components/common/ImageGuard";
+import { venueLabel, wedding } from "@/data/wedding";
 import { formatWeddingDate } from "@/lib/date";
 import "./globals.css";
 
@@ -31,9 +43,39 @@ const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
 });
 
+// 아래는 특정 버전 탭에서만 쓰는 폰트라 미리 받지 않는다 (preload: false → 실제로 쓰일 때 내려받음)
+// 필름: 영화 타이틀 + 타자기 자막
+const bebasNeue = Bebas_Neue({ variable: "--font-bebas", weight: "400", subsets: ["latin"], preload: false });
+const courierPrime = Courier_Prime({
+  variable: "--font-courier",
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  preload: false,
+});
+// 매거진: 굵은 한글 명조 헤드라인
+const nanumMyeongjo = Nanum_Myeongjo({
+  variable: "--font-nanum-myeongjo",
+  weight: ["400", "700", "800"],
+  subsets: ["latin"],
+  preload: false,
+});
+// 레터: 캘리그래피 + 우아한 세리프
+const pinyonScript = Pinyon_Script({ variable: "--font-pinyon", weight: "400", subsets: ["latin"], preload: false });
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  preload: false,
+});
+
+// 스크랩북: 한글 손글씨 + 영문 손글씨
+const nanumPen = Nanum_Pen_Script({ variable: "--font-nanum-pen", weight: "400", subsets: ["latin"], preload: false });
+const caveat = Caveat({ variable: "--font-caveat", weight: ["400", "600"], subsets: ["latin"], preload: false });
+
 export const metadata: Metadata = {
   title: `${wedding.groom.name} ♥ ${wedding.bride.name} 결혼합니다`,
-  description: `${formatWeddingDate()} ${wedding.venue.name}`,
+  description: `${formatWeddingDate()} ${venueLabel}`,
   robots: { index: false, follow: false },
 };
 
@@ -48,8 +90,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ko"
       suppressHydrationWarning
-      className={`${notoSansKr.variable} ${gowunBatang.variable} ${galmuri.variable} ${bodoniModa.variable} antialiased [scrollbar-gutter:stable]`}>
-      <body className="bg-stone-200 font-sans text-ink">{children}</body>
+      className={`${notoSansKr.variable} ${gowunBatang.variable} ${galmuri.variable} ${bodoniModa.variable} ${bebasNeue.variable} ${courierPrime.variable} ${nanumMyeongjo.variable} ${pinyonScript.variable} ${cormorant.variable} ${nanumPen.variable} ${caveat.variable} antialiased [scrollbar-gutter:stable]`}>
+      <body className="bg-stone-200 font-sans text-ink">
+        {children}
+        <ImageGuard />
+      </body>
     </html>
   );
 }

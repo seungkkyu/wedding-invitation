@@ -88,4 +88,20 @@
   --font-serif: var(--font-gowun-batang), serif;
   --font-pixel: var(--font-galmuri), monospace;
   --font-display: var(--font-bodoni), serif;
+  --font-cinema: var(--font-bebas), var(--font-noto-sans-kr), sans-serif;
+  --font-typewriter: var(--font-courier), var(--font-noto-sans-kr), monospace;
+  --font-headline: var(--font-nanum-myeongjo), serif;
+  --font-script: var(--font-pinyon), cursive;
+  --font-garamond: var(--font-cormorant), var(--font-gowun-batang), serif;
+  --font-hand: var(--font-nanum-pen), cursive;
+  --font-hand-en: var(--font-caveat), var(--font-nanum-pen), cursive;
+}
+
+/* 개인 사진 보호: iOS 길게 누르기 저장 메뉴, 선택, 끌어서 저장을 막는다 (우클릭은 ImageGuard에서) */
+@layer base {
+  img {
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
 }

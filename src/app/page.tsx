@@ -1,10 +1,10 @@
 import { IntroGate } from "@/components/intro/IntroSequence";
-import { Invitation } from "@/components/invitation/Invitation";
+import { VersionSwitch } from "@/components/versions/VersionSwitch";
 
 export default function Home() {
   return (
     <>
-      <Invitation />
+      <VersionSwitch />
       <IntroGate />
     </>
   );
