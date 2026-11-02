@@ -140,13 +140,13 @@ export const wedding = {
     flight: "LV 0620",
   },
   // 사진 (public/images/gallery). 첫 장은 버전별 커버로도 쓰인다. 비어 있으면 플레이스홀더가 표시된다.
-  // TODO: 공개용 이미지로 교체. 지금은 git에서 제외된 원본(public/images/private/)을 가리켜서 로컬에서만 보인다.
+  // 지금은 실사진 대신 일러스트 버전. 실사진 원본은 public/images/private/ (git 제외)
   gallery: [
-    { src: "/images/private/01.jpg", width: 1600, height: 1200, caption: "Hanok Garden" },
-    { src: "/images/private/02.jpg", width: 1600, height: 1200, caption: "Sapporo, Winter Night" },
-    { src: "/images/private/03.jpg", width: 1600, height: 1200, caption: "Jersey Day" },
-    { src: "/images/private/04.jpg", width: 1200, height: 1600, caption: "Afternoon Light" },
-    { src: "/images/private/05.jpg", width: 1600, height: 1200, caption: "Fukuoka, Tenjin" },
+    { src: "/images/gallery/01.jpg", width: 1448, height: 1086, caption: "Hanok Garden" },
+    { src: "/images/gallery/02.jpg", width: 1448, height: 1086, caption: "Sapporo, Winter Night" },
+    { src: "/images/gallery/03.jpg", width: 1448, height: 1086, caption: "Jersey Day" },
+    { src: "/images/gallery/04.jpg", width: 1086, height: 1448, caption: "Afternoon Light" },
+    { src: "/images/gallery/05.jpg", width: 1448, height: 1086, caption: "Fukuoka, Tenjin" },
   ] as Photo[],
 };
 
