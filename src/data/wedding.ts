@@ -1,4 +1,7 @@
-// 청첩장 내용은 전부 이 파일에서 관리한다. (현재는 임시 데이터)
+// 청첩장 내용은 전부 이 파일에서 관리한다.
+// 신랑·신부·혼주 정보, 예식 일시, 장소는 환경 변수(.env.local, 키 목록은 .env.example)에서 읽는다.
+
+import { env } from "@/lib/env";
 
 export type Person = {
   name: string;
@@ -36,26 +39,52 @@ export type BankAccount = {
   number: string;
 };
 
+export type Photo = {
+  /** public/ 기준 경로 */
+  src: string;
+  width: number;
+  height: number;
+  /** 사진 아래 짧은 설명 (장소·계절 등) */
+  caption: string;
+};
+
+/** "2027-06-20" + "11:00" → 숫자 필드 */
+function parseDateTime(date: string, time: string) {
+  const [year, month, day] = date.split("-").map(Number);
+  const [hour, minute = 0] = time.split(":").map(Number);
+  return { year, month, day, hour, minute };
+}
+
+// 환경 변수가 없을 때 쓰는 임시 값 (아무개)
+const PLACEHOLDER_PHONE = "010-0000-0000";
+
+const groom = {
+  name: env(process.env.NEXT_PUBLIC_GROOM_NAME, "김아무개"),
+  order: "장남",
+  father: env(process.env.NEXT_PUBLIC_GROOM_FATHER_NAME, "김아버지"),
+  mother: env(process.env.NEXT_PUBLIC_GROOM_MOTHER_NAME, "이어머니"),
+  phone: env(process.env.NEXT_PUBLIC_GROOM_PHONE, PLACEHOLDER_PHONE),
+  fatherPhone: env(process.env.NEXT_PUBLIC_GROOM_FATHER_PHONE, PLACEHOLDER_PHONE),
+  motherPhone: env(process.env.NEXT_PUBLIC_GROOM_MOTHER_PHONE, PLACEHOLDER_PHONE),
+} satisfies Person;
+
+const bride = {
+  name: env(process.env.NEXT_PUBLIC_BRIDE_NAME, "이아무개"),
+  order: "장녀",
+  father: env(process.env.NEXT_PUBLIC_BRIDE_FATHER_NAME, "이아버지"),
+  mother: env(process.env.NEXT_PUBLIC_BRIDE_MOTHER_NAME, "박어머니"),
+  phone: env(process.env.NEXT_PUBLIC_BRIDE_PHONE, PLACEHOLDER_PHONE),
+  fatherPhone: env(process.env.NEXT_PUBLIC_BRIDE_FATHER_PHONE, PLACEHOLDER_PHONE),
+  motherPhone: env(process.env.NEXT_PUBLIC_BRIDE_MOTHER_PHONE, PLACEHOLDER_PHONE),
+} satisfies Person;
+
 export const wedding = {
-  groom: {
-    name: "박승규",
-    order: "장남",
-    father: "김아버지",
-    mother: "박어머니",
-    phone: "010-0000-0000",
-    fatherPhone: "010-0000-0000",
-    motherPhone: "010-0000-0000",
-  } satisfies Person,
-  bride: {
-    name: "박정은",
-    order: "장녀",
-    father: "이아버지",
-    mother: "최어머니",
-    phone: "010-0000-0000",
-    fatherPhone: "010-0000-0000",
-    motherPhone: "010-0000-0000",
-  } satisfies Person,
-  date: { year: 2027, month: 5, day: 15, hour: 12, minute: 30 },
+  groom,
+  bride,
+  date: parseDateTime(
+    env(process.env.NEXT_PUBLIC_WEDDING_DATE, "2027-06-20"),
+    env(process.env.NEXT_PUBLIC_WEDDING_TIME, "11:00"),
+  ),
   // 처음 만난 날. 인트로에서 이 날을 1일로 함께한 날수를 센다.
   firstDay: { year: 2015, month: 7, day: 18 } satisfies SimpleDate,
   // 스토리 타임라인의 순간들 (현재는 임시 내용). 1,000일 단위 기념일과 예식일은 자동으로 끼워 넣는다.
@@ -72,14 +101,15 @@ export const wedding = {
     { outfit: "wedding", title: "그리고, 평생" },
   ] satisfies StoryChapter[],
   venue: {
-    name: "OO웨딩홀",
-    hall: "3층 그랜드홀",
-    address: "서울특별시 강남구 테헤란로 000",
-    tel: "02-000-0000",
+    name: env(process.env.NEXT_PUBLIC_VENUE_NAME, "아무개웨딩홀"),
+    hall: env(process.env.NEXT_PUBLIC_VENUE_HALL, "아무개홀"),
+    address: env(process.env.NEXT_PUBLIC_VENUE_ADDRESS, "서울특별시 아무구 아무로 123"),
+    tel: env(process.env.NEXT_PUBLIC_VENUE_TEL, "02-000-0000"),
+    // 교통 안내 (TODO: 웨딩홀 안내문으로 확인 후 교체)
     transport: [
-      { label: "지하철", lines: ["2호선 OO역 3번 출구 도보 5분"] },
-      { label: "버스", lines: ["간선 000, 000 · 지선 0000", "OO역 정류장 하차"] },
-      { label: "주차", lines: ["건물 지하 주차장 이용 (2시간 무료)"] },
+      { label: "지하철", lines: ["2호선 구로디지털단지역 하차", "역 앞 셔틀버스 탑승장에서 셔틀 이용"] },
+      { label: "버스", lines: ["구로디지털단지역 정류장 하차"] },
+      { label: "주차", lines: ["건물 주차장 이용 (무료 시간은 웨딩홀에 확인)"] },
     ],
   },
   greeting: [
@@ -89,25 +119,36 @@ export const wedding = {
     "귀한 걸음 하시어 축복해 주시면",
     "더없는 기쁨으로 간직하겠습니다.",
   ],
+  // 계좌번호 (TODO: 실제 계좌로 교체). 예금주 이름은 위의 이름 값을 따른다
   accounts: {
     groom: [
-      { holder: "박승규", bank: "OO은행", number: "000-0000-0000-00" },
-      { holder: "김아버지", bank: "OO은행", number: "000-0000-0000-00" },
-      { holder: "박어머니", bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: groom.name, bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: groom.father, bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: groom.mother, bank: "OO은행", number: "000-0000-0000-00" },
     ] satisfies BankAccount[],
     bride: [
-      { holder: "박정은", bank: "OO은행", number: "000-0000-0000-00" },
-      { holder: "이아버지", bank: "OO은행", number: "000-0000-0000-00" },
-      { holder: "최어머니", bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: bride.name, bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: bride.father, bank: "OO은행", number: "000-0000-0000-00" },
+      { holder: bride.mother, bank: "OO은행", number: "000-0000-0000-00" },
     ] satisfies BankAccount[],
   },
   // 신혼여행 탑승권과 출국 장면 (현재는 임시 내용)
   honeymoon: {
     from: { code: "ICN", city: "Seoul" },
     to: { code: "HNL", city: "Honolulu", name: "하와이", greeting: "ALOHA!" },
-    date: { year: 2027, month: 5, day: 16 } satisfies SimpleDate,
-    flight: "LV 0515",
+    date: { year: 2027, month: 6, day: 21 } satisfies SimpleDate,
+    flight: "LV 0620",
   },
-  // 사진 경로 (public/images/...). 비어 있으면 갤러리에 플레이스홀더가 표시된다.
-  gallery: [] as string[],
+  // 사진 (public/images/gallery). 첫 장은 버전별 커버로도 쓰인다. 비어 있으면 플레이스홀더가 표시된다.
+  // TODO: 공개용 이미지로 교체. 지금은 git에서 제외된 원본(public/images/private/)을 가리켜서 로컬에서만 보인다.
+  gallery: [
+    { src: "/images/private/01.jpg", width: 1600, height: 1200, caption: "Hanok Garden" },
+    { src: "/images/private/02.jpg", width: 1600, height: 1200, caption: "Sapporo, Winter Night" },
+    { src: "/images/private/03.jpg", width: 1600, height: 1200, caption: "Jersey Day" },
+    { src: "/images/private/04.jpg", width: 1200, height: 1600, caption: "Afternoon Light" },
+    { src: "/images/private/05.jpg", width: 1600, height: 1200, caption: "Fukuoka, Tenjin" },
+  ] as Photo[],
 };
+
+/** "지타워컨벤션 3층 그랜드홀"처럼 장소와 홀 이름을 붙인 표기 (홀 이름이 비어 있으면 장소만) */
+export const venueLabel = [wedding.venue.name, wedding.venue.hall].filter(Boolean).join(" ");

@@ -1,10 +1,11 @@
 import { Section } from "@/components/common/Section";
 import { wedding, type Person } from "@/data/wedding";
+import { parentsOf } from "@/lib/contacts";
 
 function ParentsLine({ person }: { person: Person }) {
   return (
     <p>
-      {person.father} · {person.mother}
+      {parentsOf(person)}
       <span className="text-muted">의 {person.order}</span>
       <span className="ml-3 font-serif text-base">{person.name}</span>
     </p>

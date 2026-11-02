@@ -3,32 +3,12 @@
 import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { Icon } from "@/components/common/Icon";
-import { useCopy } from "@/hooks/useCopy";
-import { useIntroStore } from "@/store/introStore";
+import { ReplayIntroButton } from "@/components/common/ReplayIntroButton";
+import { useShare } from "@/hooks/useShare";
 import { EasterEgg } from "./EasterEgg";
 
 export function Share() {
-  const { copied, copy } = useCopy();
-  const replay = useIntroStore((s) => s.replay);
-
-  // TODO: Kakao JS SDK 연동 후 카카오톡 공유로 교체. 지금은 Web Share → 링크 복사 폴백
-  const share = async () => {
-    const url = window.location.href;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: document.title, url });
-      } catch {
-        // 사용자가 공유를 취소한 경우
-      }
-      return;
-    }
-    copy(url);
-  };
-
-  const replayIntro = () => {
-    window.scrollTo({ top: 0 });
-    replay();
-  };
+  const { share, copyLink, copied } = useShare();
 
   return (
     <footer className="border-t border-line px-8 pt-14 pb-28 text-center">
@@ -45,7 +25,7 @@ export function Share() {
         </button>
         <button
           type="button"
-          onClick={() => copy(window.location.href)}
+          onClick={copyLink}
           className="flex items-center justify-center gap-1.5 border border-ink/80 py-3.5 text-[13px] text-ink"
         >
           <Icon name="link" />
@@ -57,10 +37,7 @@ export function Share() {
           <PixelSprite frames={HEART_FRAMES} palette={HEART_PALETTE} className="h-6 w-7 animate-twinkle" />
           <span className="font-pixel text-[11px] text-muted">하트를 연속으로 눌러보세요</span>
         </EasterEgg>
-        <button type="button" onClick={replayIntro} className="flex items-center gap-1.5 text-xs text-muted">
-          <Icon name="replay" className="size-3.5" />
-          인트로 다시 보기
-        </button>
+        <ReplayIntroButton className="text-muted" />
       </div>
     </footer>
   );

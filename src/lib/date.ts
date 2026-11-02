@@ -11,11 +11,15 @@ const pad = (n: number) => String(n).padStart(2, "0");
 /** 예식일 요일 (0 = 일요일). 타임존 영향을 받지 않도록 UTC 기준으로 계산 */
 export const weddingWeekday = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
 
-export function formatWeddingDate() {
+/** "오전 11시" / "오후 12시 30분" */
+export function formatWeddingTime() {
   const meridiem = hour < 12 ? "오전" : "오후";
   const h12 = hour % 12 === 0 ? 12 : hour % 12;
-  const time = minute ? `${h12}시 ${minute}분` : `${h12}시`;
-  return `${year}년 ${month}월 ${day}일 ${WEEKDAYS[weddingWeekday]}요일 ${meridiem} ${time}`;
+  return minute ? `${meridiem} ${h12}시 ${minute}분` : `${meridiem} ${h12}시`;
+}
+
+export function formatWeddingDate() {
+  return `${year}년 ${month}월 ${day}일 ${WEEKDAYS[weddingWeekday]}요일 ${formatWeddingTime()}`;
 }
 
 export function formatWeddingDateDots() {

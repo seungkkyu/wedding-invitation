@@ -1,31 +1,7 @@
 import { CopyButton } from "@/components/common/CopyButton";
 import { Icon } from "@/components/common/Icon";
 import { Section } from "@/components/common/Section";
-import { wedding, type BankAccount } from "@/data/wedding";
-
-function AccountGroup({ title, accounts }: { title: string; accounts: BankAccount[] }) {
-  return (
-    <details className="group border-b border-line">
-      <summary className="flex cursor-pointer list-none items-center justify-between py-4 font-serif text-sm text-ink">
-        {title}
-        <Icon name="chevronDown" className="size-4 text-muted transition-transform group-open:rotate-180" />
-      </summary>
-      <ul className="divide-y divide-line/70 pb-2">
-        {accounts.map((account) => (
-          <li key={account.holder} className="flex items-center justify-between py-3">
-            <div className="text-sm">
-              <p className="text-ink">{account.holder}</p>
-              <p className="text-xs text-muted">
-                {account.bank} {account.number}
-              </p>
-            </div>
-            <CopyButton text={`${account.bank} ${account.number}`} />
-          </li>
-        ))}
-      </ul>
-    </details>
-  );
-}
+import { accountGroups, accountText } from "@/lib/accounts";
 
 export function Account() {
   return (
@@ -36,8 +12,25 @@ export function Account() {
         계좌번호를 기재하였습니다.
       </p>
       <div className="border-t border-line">
-        <AccountGroup title="신랑측 계좌번호" accounts={wedding.accounts.groom} />
-        <AccountGroup title="신부측 계좌번호" accounts={wedding.accounts.bride} />
+        {accountGroups.map((group) => (
+          <details key={group.side} className="group border-b border-line">
+            <summary className="flex cursor-pointer list-none items-center justify-between py-4 font-serif text-sm text-ink">
+              {group.title}
+              <Icon name="chevronDown" className="size-4 text-muted transition-transform group-open:rotate-180" />
+            </summary>
+            <ul className="divide-y divide-line/70 pb-2">
+              {group.accounts.map((account) => (
+                <li key={account.holder} className="flex items-center justify-between py-3">
+                  <div className="text-sm">
+                    <p className="text-ink">{account.holder}</p>
+                    <p className="text-xs text-muted">{accountText(account)}</p>
+                  </div>
+                  <CopyButton text={accountText(account)} />
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
       </div>
     </Section>
   );

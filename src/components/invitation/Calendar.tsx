@@ -1,17 +1,15 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { Section } from "@/components/common/Section";
 import { wedding } from "@/data/wedding";
+import { useDday } from "@/hooks/useCountdown";
 import { Countdown } from "./Countdown";
 import { EasterEgg } from "./EasterEgg";
-import { daysUntilWedding, formatWeddingDate, WEEKDAYS, weddingMonthCells } from "@/lib/date";
-
-const noopSubscribe = () => () => {};
+import { formatWeddingDate, WEEKDAYS, weddingMonthCells } from "@/lib/date";
 
 function DdayText() {
   // 서버 렌더 시점과 클라이언트의 날짜가 다를 수 있어 클라이언트에서만 계산
-  const days = useSyncExternalStore(noopSubscribe, () => daysUntilWedding(), () => null);
+  const days = useDday();
   if (days === null) return null;
 
   const { groom, bride } = wedding;

@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (can opt-in for committing if needed) — 키 목록은 .env.example 참고
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -42,3 +43,6 @@ next-env.d.ts
 
 # docs (md files are local only)
 *.md
+
+# 원본 개인 사진 (커밋하지 않음). 공개용 이미지는 public/images/gallery/
+/public/images/private/

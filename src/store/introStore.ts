@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { features } from "@/lib/env";
 
 /**
  * 인트로 진행 상태. 타이밍은 IntroSequence의 애니메이션 시퀀스가 결정하고,
@@ -20,7 +21,8 @@ type IntroState = {
 };
 
 export const useIntroStore = create<IntroState>()((set) => ({
-  phase: "count",
+  // 인트로를 끄면(NEXT_PUBLIC_INTRO_ENABLED=false) 처음부터 청첩장을 보여 준다
+  phase: features.intro ? "count" : "done",
   setPhase: (phase) => set({ phase }),
   skip: () => set({ phase: "done" }),
   replay: () => set({ phase: "count" }),

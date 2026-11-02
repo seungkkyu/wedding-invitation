@@ -1,9 +1,9 @@
-import { wedding } from "@/data/wedding";
+import { venueLabel, wedding } from "@/data/wedding";
 import { formatWeddingDate, formatWeddingDateDots } from "@/lib/date";
 import { EasterEgg } from "./EasterEgg";
 
 export function Cover() {
-  const { groom, bride, venue } = wedding;
+  const { groom, bride } = wedding;
 
   return (
     <section className="flex min-h-dvh flex-col">
@@ -22,7 +22,7 @@ export function Cover() {
         <p className="mt-7 text-[13px] leading-6 text-muted">
           {formatWeddingDate()}
           <br />
-          {venue.name} {venue.hall}
+          {venueLabel}
         </p>
       </div>
     </section>
