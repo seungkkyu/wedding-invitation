@@ -27,7 +27,7 @@ function Composer({ initial, onCancel, onSend }: { initial?: Cheer; onCancel: ()
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-night/70 overscroll-contain"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -36,28 +36,30 @@ function Composer({ initial, onCancel, onSend }: { initial?: Cheer; onCancel: ()
       <motion.form
         onSubmit={submit}
         onClick={(event) => event.stopPropagation()}
-        className="w-full max-w-[480px] bg-paper px-8 pt-8 pb-10"
+        className="w-full max-w-[480px] bg-ivory px-8 pt-8 pb-10 font-pixel"
         initial={{ y: "100%" }}
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       >
-        <p className="font-display text-xl text-accent italic">Cheer Pass</p>
-        <h3 className="mt-2 font-serif text-base text-ink">두 사람의 비행기에 실을 축하 한마디</h3>
+        <p className="text-lg text-accent">Cheer Pass</p>
+        <h3 className="mt-2 text-sm text-ink">두 사람의 비행기에 실을 축하 한마디</h3>
 
         <label className="mt-8 block">
-          <span className="text-[10px] tracking-[0.2em] text-muted">NAME</span>
+          <span className="text-[11px] tracking-[0.2em] text-muted">NAME</span>
           <input
             value={name}
+            name="name"
+            autoComplete="name"
             onChange={(event) => setName(event.target.value)}
             maxLength={NAME_MAX}
             placeholder="이름 (선택)"
-            className="mt-1 w-full border-b border-line bg-transparent py-2 text-sm text-ink outline-none placeholder:text-muted/60 focus:border-accent"
+            className="mt-1 w-full border-b-2 border-line bg-transparent py-2 text-base text-ink outline-none placeholder:text-muted focus:border-accent"
           />
         </label>
 
         <label className="mt-6 block">
-          <span className="flex justify-between text-[10px] tracking-[0.2em] text-muted">
+          <span className="flex justify-between text-[11px] tracking-[0.2em] text-muted">
             MESSAGE
             <span className="lining-nums">
               {message.length}/{MESSAGE_MAX}
@@ -65,10 +67,12 @@ function Composer({ initial, onCancel, onSend }: { initial?: Cheer; onCancel: ()
           </span>
           <input
             value={message}
+            name="message"
+            autoComplete="off"
             onChange={(event) => setMessage(event.target.value)}
             maxLength={MESSAGE_MAX}
             placeholder="축하 한마디"
-            className="mt-1 w-full border-b border-line bg-transparent py-2 text-sm text-ink outline-none placeholder:text-muted/60 focus:border-accent"
+            className="mt-1 w-full border-b-2 border-line bg-transparent py-2 text-base text-ink outline-none placeholder:text-muted focus:border-accent"
           />
         </label>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -78,7 +82,7 @@ function Composer({ initial, onCancel, onSend }: { initial?: Cheer; onCancel: ()
               type="button"
               onClick={() => setMessage(preset)}
               className={`border px-3 py-1.5 text-xs transition-colors ${
-                message === preset ? "border-accent bg-accent text-white" : "border-line text-ink"
+                message === preset ? "border-accent bg-accent text-night" : "border-line text-ink"
               }`}
             >
               {preset}
@@ -93,7 +97,7 @@ function Composer({ initial, onCancel, onSend }: { initial?: Cheer; onCancel: ()
           <button
             type="submit"
             disabled={!message.trim()}
-            className="flex items-center justify-center gap-2 bg-night py-3.5 font-pixel text-sm text-white disabled:opacity-40"
+            className="flex items-center justify-center gap-2 bg-accent py-3.5 text-sm text-night disabled:opacity-40"
           >
             <PixelSprite frames={PLANE_FRAMES} palette={PLANE_PALETTE} className="h-2.5 w-[26px]" />
             보내기
@@ -110,27 +114,27 @@ function IssuedPass({ cheer, onReplay, onRewrite }: { cheer: Cheer; onReplay: ()
   return (
     <div className="perspective-[900px]">
       <motion.article
-        className="relative origin-top bg-ivory shadow-[0_14px_36px_-16px_rgba(47,42,37,0.35)] ring-1 ring-line"
+        className="relative origin-top bg-ivory font-pixel pixel-box"
         initial={{ rotateX: -90, opacity: 0 }}
         animate={{ rotateX: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="px-6 pt-5 pb-6">
-          <p className="flex justify-between text-[10px] tracking-[0.25em] text-muted">
+          <p className="flex justify-between text-[11px] tracking-[0.25em] text-muted">
             <span>CHEER PASS</span>
             <span className="lining-nums">{honeymoon.flight}</span>
           </p>
           <dl className="mt-6 space-y-4">
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-muted">PASSENGER</dt>
-              <dd className="mt-1 font-serif text-lg text-ink">{cheer.name ? `${cheer.name} 님` : "소중한 하객 님"}</dd>
+              <dt className="text-[11px] tracking-[0.2em] text-muted">PASSENGER</dt>
+              <dd className="mt-1 text-base text-ink">{cheer.name ? `${cheer.name} 님` : "소중한 하객 님"}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-muted">MESSAGE</dt>
-              <dd className="mt-1 font-serif text-base text-ink">“{cheer.message}”</dd>
+              <dt className="text-[11px] tracking-[0.2em] text-muted">MESSAGE</dt>
+              <dd className="mt-1 text-sm text-ink">“{cheer.message}”</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-muted">DELIVERED TO</dt>
+              <dt className="text-[11px] tracking-[0.2em] text-muted">DELIVERED TO</dt>
               <dd className="mt-1 text-sm text-ink">
                 {groom.name} · {bride.name} <span className="text-muted">— {honeymoon.to.city}</span>
               </dd>
@@ -138,12 +142,12 @@ function IssuedPass({ cheer, onReplay, onRewrite }: { cheer: Cheer; onReplay: ()
           </dl>
         </div>
         {/* 도장 */}
-        <span className="absolute top-14 right-6 flex size-20 rotate-[-14deg] items-center justify-center rounded-full border-2 border-accent/70 text-center font-display text-[11px] leading-tight tracking-widest text-accent/80 italic">
+        <span className="absolute top-14 right-6 flex size-20 rotate-[-14deg] items-center justify-center border-2 border-accent/70 text-center text-[11px] leading-tight text-accent/80">
           Cheered
           <br />
           with love
         </span>
-        <div className="mx-4 border-t border-dashed border-line" />
+        <div className="mx-4 border-t-2 border-dashed border-line" />
         <div className="grid grid-cols-2 divide-x divide-line text-[13px]">
           <button type="button" onClick={onReplay} className="py-3.5 text-ink">
             장면 다시 보기
@@ -177,8 +181,8 @@ export function CheerPass() {
         ) : (
           // 접힌 티켓: 위쪽 반만 보이고 아래는 접혀 들어간 모양
           <button type="button" onClick={() => setStep("composing")} className="group block w-full text-left">
-            <span className="block bg-ivory px-6 pt-4 pb-5 ring-1 ring-line">
-              <span className="flex justify-between text-[10px] tracking-[0.25em] text-muted">
+            <span className="block bg-ivory px-6 pt-4 pb-5 font-pixel pixel-box">
+              <span className="flex justify-between text-[11px] tracking-[0.25em] text-muted">
                 <span>CHEER PASS</span>
                 <span className="lining-nums">{honeymoon.flight}</span>
               </span>
@@ -188,7 +192,7 @@ export function CheerPass() {
               </span>
             </span>
             <span className="mx-1 block h-2 bg-linear-to-b from-line to-transparent" />
-            <span className="mt-4 flex items-center justify-center gap-2 border border-ink/80 py-3.5 text-[13px] text-ink transition-colors group-active:bg-line/40">
+            <span className="mt-5 flex items-center justify-center gap-2 bg-ivory py-3 text-xs text-ink pixel-btn [--pixel-border:var(--color-control)]">
               <PixelSprite frames={PLANE_FRAMES} palette={PLANE_PALETTE} className="h-2.5 w-[26px]" />
               축하 보내기
             </span>

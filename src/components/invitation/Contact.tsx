@@ -1,17 +1,17 @@
 import { CallButtons } from "@/components/common/CallButtons";
-import { Section } from "@/components/common/Section";
+import { PixelSection, PixelWindow } from "@/components/pixel/PixelSection";
 import { contactGroups } from "@/lib/contacts";
 
 export function Contact() {
   return (
-    <Section eyebrow="Contact" title="연락하기">
-      <div className="space-y-10">
+    <PixelSection title="연락하기">
+      <div className="space-y-8">
         {contactGroups.map((group) => (
-          <div key={group.side}>
-            <h3 className="border-b border-ink/70 pb-2 font-serif text-sm text-ink">{group.label}측</h3>
-            <ul className="divide-y divide-line">
+          <PixelWindow key={group.side} className="px-5 pt-4 pb-2 font-pixel">
+            <h3 className="text-sm text-accent">{group.label}측</h3>
+            <ul className="mt-2 divide-y-2 divide-dashed divide-line">
               {group.rows.map((row) => (
-                <li key={row.role} className="flex items-center justify-between py-3.5">
+                <li key={row.role} className="flex items-center justify-between py-3">
                   <span className="text-sm text-ink">
                     <span className="inline-block w-12 text-xs text-muted">{row.role}</span>
                     {row.name}
@@ -19,15 +19,16 @@ export function Contact() {
                   <CallButtons
                     name={row.name}
                     phone={row.phone}
-                    className="flex gap-2 text-accent"
-                    buttonClassName="flex size-9 items-center justify-center rounded-full border border-line"
+                    className="flex gap-3 text-ink"
+                    buttonClassName="flex size-11 items-center justify-center bg-night pixel-btn [--pixel-border:var(--color-control)]"
+                    iconClassName="size-4"
                   />
                 </li>
               ))}
             </ul>
-          </div>
+          </PixelWindow>
         ))}
       </div>
-    </Section>
+    </PixelSection>
   );
 }

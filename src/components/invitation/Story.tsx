@@ -317,7 +317,7 @@ export function Story() {
             type="button"
             onClick={() => setOpen(true)}
             aria-label="우리의 이야기 보기"
-            className="fixed right-[max(1rem,calc((100vw-480px)/2+1rem))] bottom-5 z-30 flex size-13 items-center justify-center rounded-full bg-night shadow-[0_8px_24px_-6px_rgba(28,27,51,0.55)] ring-1 ring-gold/40"
+            className="fixed right-[max(1.25rem,calc((100vw-480px)/2+1.25rem))] bottom-6 z-30 flex size-13 items-center justify-center bg-night pixel-btn [--pixel-border:var(--color-gold)]"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}

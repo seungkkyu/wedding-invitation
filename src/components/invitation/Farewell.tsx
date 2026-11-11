@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
-import { Section } from "@/components/common/Section";
+import { PixelSection } from "@/components/pixel/PixelSection";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { PLANE_FRAMES, PLANE_PALETTE } from "@/components/pixel/sprites";
 import { wedding } from "@/data/wedding";
@@ -13,8 +13,8 @@ import { Departure } from "./Departure";
 function Field({ label, value, className = "" }: { label: string; value: string; className?: string }) {
   return (
     <div className={className}>
-      <dt className="text-[10px] tracking-[0.2em] text-muted">{label}</dt>
-      <dd className="mt-1 font-display text-sm text-ink lining-nums">{value}</dd>
+      <dt className="text-[11px] tracking-[0.15em] text-muted">{label}</dt>
+      <dd className="mt-1 text-sm text-ink">{value}</dd>
     </div>
   );
 }
@@ -25,16 +25,16 @@ export function Farewell() {
   const { groom, bride, honeymoon } = wedding;
 
   return (
-    <Section eyebrow="Bon Voyage" title="신혼여행을 떠납니다">
-      <article className="bg-ivory shadow-[0_14px_36px_-16px_rgba(47,42,37,0.35)] ring-1 ring-line">
+    <PixelSection title="신혼여행을 떠납니다">
+      <article className="bg-ivory font-pixel pixel-box">
         <div className="px-6 pt-5 pb-6">
-          <p className="flex justify-between text-[10px] tracking-[0.25em] text-muted">
+          <p className="flex justify-between text-[11px] tracking-[0.25em] text-muted">
             <span>BOARDING PASS</span>
             <span className="lining-nums">{honeymoon.flight}</span>
           </p>
           <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
             <div>
-              <p className="font-display text-4xl leading-none text-ink">{honeymoon.from.code}</p>
+              <p className="text-3xl leading-none text-ink">{honeymoon.from.code}</p>
               <p className="mt-2 text-xs text-muted">{honeymoon.from.city}</p>
             </div>
             <div className="flex items-center gap-1.5 text-accent/50">
@@ -43,14 +43,14 @@ export function Farewell() {
               <span className="w-6 border-t border-dashed border-current" />
             </div>
             <div className="text-right">
-              <p className="font-display text-4xl leading-none text-ink">{honeymoon.to.code}</p>
+              <p className="text-3xl leading-none text-ink">{honeymoon.to.code}</p>
               <p className="mt-2 text-xs text-muted">{honeymoon.to.city}</p>
             </div>
           </div>
         </div>
 
         {/* 절취선 */}
-        <div className="mx-4 border-t border-dashed border-line" />
+        <div className="mx-4 border-t-2 border-dashed border-line" />
 
         <dl className="grid grid-cols-3 gap-y-4 px-6 pt-5 pb-6">
           <Field label="PASSENGER" value={`${groom.name} · ${bride.name}`} className="col-span-3" />
@@ -62,7 +62,7 @@ export function Farewell() {
         <button
           type="button"
           onClick={() => setDeparting(true)}
-          className="flex w-full items-center justify-center gap-2 bg-night py-4 font-pixel text-sm text-white"
+          className="flex w-full items-center justify-center gap-2 bg-accent py-4 text-sm text-night"
         >
           <PixelSprite frames={PLANE_FRAMES} palette={PLANE_PALETTE} className="h-2.5 w-[26px]" />
           배웅하기
@@ -72,6 +72,6 @@ export function Farewell() {
       <CheerPass />
 
       <AnimatePresence>{departing && <Departure onClose={() => setDeparting(false)} />}</AnimatePresence>
-    </Section>
+    </PixelSection>
   );
 }

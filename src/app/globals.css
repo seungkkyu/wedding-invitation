@@ -83,6 +83,75 @@
   );
 }
 
+/*
+ * 도트 버전 테마: 인트로의 밤하늘에서 이어지는 RPG 화면.
+ * 공통 색 토큰(ink·muted·line·accent·ivory)을 이 범위 안에서만 다시 정의해
+ * 기존 클래스(text-ink, bg-ivory 등)가 그대로 밤 배경용 색으로 바뀌게 한다.
+ */
+@utility theme-pixel {
+  color-scheme: dark;
+  -webkit-tap-highlight-color: transparent;
+  --color-ink: #f2eefb;
+  --color-muted: #a3a0cc;
+  --color-line: #3d3b6e;
+  --color-accent: #e8c879;
+  --color-ivory: #262550;
+  /* 버튼 테두리: 배경 대비 3:1 이상 (조작 가능한 요소임이 보이도록) */
+  --color-control: #7a76b8;
+  background-color: var(--color-night);
+  /* 드문드문 박힌 2px 별 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='220' shape-rendering='crispEdges'%3E%3Cg fill='%23ffffff'%3E%3Crect x='18' y='26' width='2' height='2' opacity='.5'/%3E%3Crect x='120' y='60' width='2' height='2' opacity='.35'/%3E%3Crect x='70' y='140' width='2' height='2' opacity='.45'/%3E%3Crect x='140' y='190' width='2' height='2' opacity='.3'/%3E%3Crect x='40' y='200' width='2' height='2' opacity='.25'/%3E%3C/g%3E%3Crect x='96' y='12' width='2' height='2' fill='%23e8c879' opacity='.5'/%3E%3C/svg%3E");
+}
+
+/* 도트 대화창 테두리: 모서리가 한 칸씩 깎인 3px 픽셀 선 (--pixel-border로 색 지정) */
+@utility pixel-box {
+  box-shadow:
+    0 -3px 0 0 var(--pixel-border, #d9d4ff),
+    0 3px 0 0 var(--pixel-border, #d9d4ff),
+    -3px 0 0 0 var(--pixel-border, #d9d4ff),
+    3px 0 0 0 var(--pixel-border, #d9d4ff);
+}
+
+/* 도트 버튼: 아래쪽에 한 칸 어두운 그림자, 누르면 내려앉는다 */
+@utility pixel-btn {
+  touch-action: manipulation;
+  cursor: pointer;
+  box-shadow:
+    0 -2px 0 0 var(--pixel-border, #d9d4ff),
+    0 2px 0 0 var(--pixel-border, #d9d4ff),
+    -2px 0 0 0 var(--pixel-border, #d9d4ff),
+    2px 0 0 0 var(--pixel-border, #d9d4ff),
+    inset 0 -3px 0 0 rgb(0 0 0 / 0.28);
+  &:active {
+    transform: translateY(2px);
+    box-shadow:
+      0 -2px 0 0 var(--pixel-border, #d9d4ff),
+      0 2px 0 0 var(--pixel-border, #d9d4ff),
+      -2px 0 0 0 var(--pixel-border, #d9d4ff),
+      2px 0 0 0 var(--pixel-border, #d9d4ff);
+  }
+}
+
+/* 도트 테마의 키보드 포커스: 금색 픽셀 테두리 */
+@utility pixel-focus {
+  & :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+}
+
+/* 동작 줄이기 설정: 반복되는 장식 애니메이션을 멈춘다 */
+@media (prefers-reduced-motion: reduce) {
+  .animate-twinkle,
+  .animate-walk,
+  .animate-petal,
+  .animate-flicker,
+  .animate-drift,
+  .animate-wave {
+    animation: none;
+  }
+}
+
 @theme inline {
   --font-sans: var(--font-noto-sans-kr), sans-serif;
   --font-serif: var(--font-gowun-batang), serif;

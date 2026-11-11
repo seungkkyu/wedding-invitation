@@ -12,7 +12,7 @@ import { Story } from "./Story";
 
 export function Invitation() {
   return (
-    <main className="mx-auto min-h-dvh max-w-[480px] bg-paper text-ink shadow-[0_0_40px_rgba(47,42,37,0.08)]">
+    <main className="theme-pixel pixel-focus mx-auto min-h-dvh max-w-[480px] overflow-x-clip text-ink">
       <Cover />
       <Greeting />
       <Calendar />

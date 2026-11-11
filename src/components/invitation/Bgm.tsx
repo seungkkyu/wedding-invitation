@@ -54,7 +54,7 @@ export function Bgm() {
       onClick={toggle}
       aria-label={playing ? "배경음악 끄기" : "배경음악 켜기"}
       aria-pressed={playing}
-      className="fixed top-4 right-[max(1rem,calc((100vw-480px)/2+1rem))] z-30 flex size-9 items-center justify-center rounded-full bg-ivory/80 text-ink/70 ring-1 ring-line backdrop-blur-sm"
+      className="fixed bottom-6 left-[max(1.25rem,calc((100vw-480px)/2+1.25rem))] z-30 flex size-10 items-center justify-center bg-ivory text-ink/80 pixel-btn [--pixel-border:var(--color-control)]"
     >
       <PixelSprite
         frames={playing ? SPEAKER_ON_FRAMES : SPEAKER_OFF_FRAMES}

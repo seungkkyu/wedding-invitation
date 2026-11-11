@@ -1,6 +1,8 @@
 "use client";
 
-import { Section } from "@/components/common/Section";
+import { PixelSection, PixelWindow } from "@/components/pixel/PixelSection";
+import { PixelSprite } from "@/components/pixel/PixelSprite";
+import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { wedding } from "@/data/wedding";
 import { useDday } from "@/hooks/useCountdown";
 import { Countdown } from "./Countdown";
@@ -15,13 +17,13 @@ function DdayText() {
   const { groom, bride } = wedding;
   const names = (
     <>
-      {groom.name.slice(1)} <EasterEgg className="text-rose-400">♥</EasterEgg> {bride.name.slice(1)}
+      {groom.name.slice(1)} <EasterEgg className="text-[#ff6b8b]">♥</EasterEgg> {bride.name.slice(1)}
     </>
   );
   if (days > 0) {
     return (
       <>
-        {names}의 결혼식이 <span className="font-semibold text-accent">{days}일</span> 남았습니다
+        {names}의 결혼식이 <span className="text-accent">{days}일</span> 남았습니다
       </>
     );
   }
@@ -33,32 +35,43 @@ export function Calendar() {
   const { year, month, day } = wedding.date;
 
   return (
-    <Section eyebrow="Wedding Day" title={`${year}년 ${month}월`}>
-      <p className="-mt-6 mb-10 text-center text-[13px] text-muted">{formatWeddingDate()}</p>
-      <div className="grid grid-cols-7 gap-y-3 border-y border-line py-7 text-center text-[13px]">
-        {WEEKDAYS.map((weekday, i) => (
-          <span key={weekday} className={`pb-2 text-xs ${i === 0 ? "text-rose-400/80" : "text-muted"}`}>
-            {weekday}
-          </span>
-        ))}
-        {weddingMonthCells().map((date, i) => (
-          <span key={i} className="flex justify-center">
-            {date && (
-              <span
-                className={`flex size-8 items-center justify-center rounded-full ${
-                  date === day ? "bg-accent font-medium text-white" : i % 7 === 0 ? "text-rose-400/80" : "text-ink"
-                }`}
-              >
-                {date}
-              </span>
-            )}
-          </span>
-        ))}
-      </div>
+    <PixelSection title={`${year}년 ${month}월`}>
+      <p className="-mt-5 mb-8 text-center font-pixel text-xs text-muted">{formatWeddingDate()}</p>
+      <PixelWindow className="px-4 py-6">
+        <div className="grid grid-cols-7 gap-y-2.5 text-center font-pixel text-[13px]">
+          {WEEKDAYS.map((weekday, i) => (
+            <span key={weekday} className={`pb-2 text-xs ${i === 0 ? "text-[#ff8fa6]" : "text-muted"}`}>
+              {weekday}
+            </span>
+          ))}
+          {weddingMonthCells().map((date, i) => (
+            <span key={i} className="flex justify-center">
+              {date &&
+                (date === day ? (
+                  // 예식일: 도트 하트 위에 날짜
+                  <span className="relative flex size-9 items-center justify-center text-night">
+                    <PixelSprite
+                      frames={HEART_FRAMES}
+                      palette={HEART_PALETTE}
+                      className="absolute inset-0 m-auto h-8 w-9"
+                    />
+                    <span className="relative -mt-1.5">{date}</span>
+                  </span>
+                ) : (
+                  <span
+                    className={`flex size-9 items-center justify-center ${i % 7 === 0 ? "text-[#ff8fa6]" : "text-ink"}`}
+                  >
+                    {date}
+                  </span>
+                ))}
+            </span>
+          ))}
+        </div>
+      </PixelWindow>
       <Countdown />
-      <p className="mt-8 min-h-6 text-center text-[13px] text-ink">
+      <p className="mt-8 min-h-6 text-center font-pixel text-[13px] text-ink">
         <DdayText />
       </p>
-    </Section>
+    </PixelSection>
   );
 }

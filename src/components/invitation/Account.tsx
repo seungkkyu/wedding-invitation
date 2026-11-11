@@ -1,37 +1,44 @@
 import { CopyButton } from "@/components/common/CopyButton";
-import { Icon } from "@/components/common/Icon";
-import { Section } from "@/components/common/Section";
+import { PixelSection, PixelWindow } from "@/components/pixel/PixelSection";
 import { accountGroups, accountText } from "@/lib/accounts";
 
 export function Account() {
   return (
-    <Section eyebrow="Account" title="마음 전하실 곳">
-      <p className="-mt-4 mb-10 text-center text-[13px] leading-6 text-muted">
+    <PixelSection title="마음 전하실 곳">
+      <p className="-mt-4 mb-10 text-center font-pixel text-xs leading-6 text-muted">
         참석이 어려우신 분들을 위해
         <br />
         계좌번호를 기재하였습니다.
       </p>
-      <div className="border-t border-line">
+      <div className="space-y-6">
         {accountGroups.map((group) => (
-          <details key={group.side} className="group border-b border-line">
-            <summary className="flex cursor-pointer list-none items-center justify-between py-4 font-serif text-sm text-ink">
-              {group.title}
-              <Icon name="chevronDown" className="size-4 text-muted transition-transform group-open:rotate-180" />
-            </summary>
-            <ul className="divide-y divide-line/70 pb-2">
-              {group.accounts.map((account) => (
-                <li key={account.holder} className="flex items-center justify-between py-3">
-                  <div className="text-sm">
-                    <p className="text-ink">{account.holder}</p>
-                    <p className="text-xs text-muted">{accountText(account)}</p>
-                  </div>
-                  <CopyButton text={accountText(account)} />
-                </li>
-              ))}
-            </ul>
-          </details>
+          <PixelWindow key={group.side} className="font-pixel">
+            <details className="group">
+              <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-4 text-sm text-ink">
+                {group.title}
+                {/* 열리면 커서가 아래를 가리킨다 */}
+                <span aria-hidden className="text-xs text-accent transition-transform group-open:rotate-90">
+                  ▶
+                </span>
+              </summary>
+              <ul className="mx-5 divide-y-2 divide-dashed divide-line border-t-2 border-dashed border-line pb-2">
+                {group.accounts.map((account) => (
+                  <li key={account.holder} className="flex items-center justify-between gap-3 py-3">
+                    <div className="min-w-0 text-sm break-words">
+                      <p className="text-ink">{account.holder}</p>
+                      <p className="mt-0.5 text-xs text-muted">{accountText(account)}</p>
+                    </div>
+                    <CopyButton
+                      text={accountText(account)}
+                      className="min-h-11 bg-night px-3.5 text-xs text-accent pixel-btn [--pixel-border:var(--color-control)]"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </PixelWindow>
         ))}
       </div>
-    </Section>
+    </PixelSection>
   );
 }
