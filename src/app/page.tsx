@@ -1,11 +1,5 @@
-import { IntroGate } from "@/components/intro/IntroSequence";
-import { VersionSwitch } from "@/components/versions/VersionSwitch";
+import { VersionPicker } from "@/components/versions/VersionPicker";
 
 export default function Home() {
-  return (
-    <>
-      <VersionSwitch />
-      <IntroGate />
-    </>
-  );
+  return <VersionPicker />;
 }

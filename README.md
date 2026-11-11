@@ -82,17 +82,18 @@ npm run dev                  # http://localhost:3000
 
 다섯 버전 모두 `gallery` 전체를 순서대로 보여 준다.
 
-## 버전 탭
+## 디자인별 페이지
 
-- 인트로가 끝나면 화면 위에 탭이 뜬다. 아래로 스크롤하면 숨고, 위로 올리면 다시 나온다.
-- 링크에 `?v=`를 붙이면 그 버전으로 바로 열린다: `?v=pixel` `?v=film` `?v=magazine` `?v=letter` `?v=scrapbook`
-- 기본 탭(도트) 외의 버전은 탭을 눌렀을 때 내려받는다 (`next/dynamic`).
+- `/` 홈에서 디자인을 고르면 `/pixel` `/film` `/magazine` `/letter` `/scrapbook` 페이지로 이동한다. 링크를 공유하면 그 디자인으로 바로 열린다.
+- 도트 인트로(날수 카운트 → 궁전 입장)는 `/pixel`에서만 재생된다.
+- 각 페이지 위의 탭으로 다른 디자인이나 홈으로 이동한다. 아래로 스크롤하면 숨고, 위로 올리면 다시 나온다.
+- 예전 링크(`/?v=film`)는 해당 경로로 리다이렉트된다 (`next.config.ts`).
 
 ### 새 버전 추가하기
 
 1. `src/components/<이름>/<이름>Invitation.tsx`를 만들고 컴포넌트를 export한다.
-2. [`src/store/versionStore.ts`](src/store/versionStore.ts)의 `VERSIONS`에 `{ id, label }`을 추가한다.
-3. [`src/components/versions/VersionSwitch.tsx`](src/components/versions/VersionSwitch.tsx)에 `dynamic` import와 렌더 한 줄을 추가한다.
+2. [`src/lib/versions.ts`](src/lib/versions.ts)의 `VERSIONS`에 `{ id, label, description }`을 추가한다.
+3. `src/app/<이름>/page.tsx`에서 컴포넌트와 `VersionTabs`를 렌더하고, 홈 견본은 [`VersionPicker.tsx`](src/components/versions/VersionPicker.tsx)의 `Swatch`에 추가한다. `next.config.ts` 리다이렉트 목록에도 이름을 넣는다.
 4. 테마 전용 폰트가 필요하면 `src/app/layout.tsx`에 `preload: false`로 추가하고, `globals.css`의 `@theme inline`에 `--font-*`를 등록한다.
 
 데이터·기능은 아래 공통 모듈을 쓰고, 테마 폴더에는 모양(마크업·스타일)만 둔다.

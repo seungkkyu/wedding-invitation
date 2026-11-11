@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
-import { useIntroStore } from "@/store/introStore";
 import { Credits } from "./Credits";
 import { FilmAccount, FilmCast, FilmLocation } from "./FilmInfo";
 import { FilmEnding } from "./FilmEnding";
@@ -49,13 +48,12 @@ function EdgeSprockets() {
 
 /** 영화 필름 버전: 필름 리더 → 타이틀 → 장면별로 이어지는 청첩장 */
 export function FilmInvitation() {
-  const introDone = useIntroStore((s) => s.phase === "done");
   const reduceMotion = useReducedMotion();
   const [leaderDone, setLeaderDone] = useState(false);
 
-  // 인트로가 끝난 뒤에 리더를 돌리고, 리더가 끝나면 타이틀이 열린다
-  const showLeader = introDone && !leaderDone && !reduceMotion;
-  const ready = introDone && (leaderDone || !!reduceMotion);
+  // 페이지가 열리면 리더를 돌리고, 리더가 끝나면 타이틀이 열린다
+  const showLeader = !leaderDone && !reduceMotion;
+  const ready = leaderDone || !!reduceMotion;
 
   return (
     <main className="relative mx-auto min-h-dvh max-w-[480px] overflow-x-clip bg-[#0e0d0c] font-sans text-[#efe6d6]">

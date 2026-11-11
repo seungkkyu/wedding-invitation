@@ -1,16 +1,20 @@
 "use client";
 
 import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { VERSIONS, useVersionStore } from "@/store/versionStore";
+import { VERSIONS, versionHref } from "@/lib/versions";
+import { useIntroStore } from "@/store/introStore";
 
 // 이만큼 내려간 뒤부터는 아래로 스크롤하면 숨기고, 위로 올리면 다시 보여 준다
 const HIDE_AFTER_PX = 120;
 
-/** 상단 플로팅 탭: 청첩장 디자인 버전 전환 */
+/** 상단 플로팅 탭: 다른 청첩장 디자인 페이지로 이동 */
 export function VersionTabs() {
-  const version = useVersionStore((s) => s.version);
-  const setVersion = useVersionStore((s) => s.setVersion);
+  const pathname = usePathname();
+  // 도트 버전은 인트로가 끝난 뒤에 탭을 보여 준다
+  const introPlaying = useIntroStore((s) => s.phase !== "done");
   const [hidden, setHidden] = useState(false);
   const { scrollY } = useScroll();
 
@@ -19,14 +23,7 @@ export function VersionTabs() {
     setHidden(y > HIDE_AFTER_PX && y > previous);
   });
 
-  const select = (id: (typeof VERSIONS)[number]["id"]) => {
-    if (id === version) return;
-    setVersion(id);
-    const url = new URL(window.location.href);
-    url.searchParams.set("v", id);
-    history.replaceState(null, "", url);
-    window.scrollTo({ top: 0 });
-  };
+  if (pathname === versionHref("pixel") && introPlaying) return null;
 
   return (
     <motion.nav
@@ -36,25 +33,39 @@ export function VersionTabs() {
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <ul className="flex gap-0.5 rounded-full bg-neutral-900/55 p-1 shadow-[0_6px_24px_-8px_rgba(0,0,0,0.45)] ring-1 ring-white/15 backdrop-blur-md">
-        {VERSIONS.map(({ id, label }) => (
-          <li key={id}>
-            <button
-              type="button"
-              onClick={() => select(id)}
-              aria-current={id === version ? "page" : undefined}
-              className="relative px-3 py-1.5 text-xs tracking-wide text-white/70 transition-colors aria-[current=page]:text-neutral-900"
-            >
-              {id === version && (
-                <motion.span
-                  layoutId="version-tab"
-                  className="absolute inset-0 rounded-full bg-white"
-                  transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                />
-              )}
-              <span className="relative">{label}</span>
-            </button>
-          </li>
-        ))}
+        <li>
+          <Link
+            href="/"
+            aria-label="디자인 고르기"
+            className="relative flex h-full items-center px-2.5 text-white/70 transition-colors hover:text-white"
+          >
+            <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden>
+              <path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z" fill="currentColor" />
+            </svg>
+          </Link>
+        </li>
+        {VERSIONS.map(({ id, label }) => {
+          const href = versionHref(id);
+          const current = pathname === href;
+          return (
+            <li key={id}>
+              <Link
+                href={href}
+                aria-current={current ? "page" : undefined}
+                className="relative block px-3 py-1.5 text-xs tracking-wide text-white/70 transition-colors aria-[current=page]:text-neutral-900"
+              >
+                {current && (
+                  <motion.span
+                    layoutId="version-tab"
+                    className="absolute inset-0 rounded-full bg-white"
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                  />
+                )}
+                <span className="relative">{label}</span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </motion.nav>
   );

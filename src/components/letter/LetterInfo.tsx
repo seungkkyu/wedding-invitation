@@ -3,7 +3,6 @@
 import { CallButtons } from "@/components/common/CallButtons";
 import { CopyButton } from "@/components/common/CopyButton";
 import { Icon } from "@/components/common/Icon";
-import { ReplayIntroButton } from "@/components/common/ReplayIntroButton";
 import { venueLabel, wedding } from "@/data/wedding";
 import { useShare } from "@/hooks/useShare";
 import { accountGroups, accountText } from "@/lib/accounts";
@@ -160,7 +159,6 @@ export function LetterClosing() {
           {copied ? "복사되었습니다" : "링크 복사"}
         </button>
       </div>
-      <ReplayIntroButton className="mx-auto mt-10 text-[#a99a90]" />
     </footer>
   );
 }

@@ -3,7 +3,6 @@
 import { CallButtons } from "@/components/common/CallButtons";
 import { CopyButton } from "@/components/common/CopyButton";
 import { Icon } from "@/components/common/Icon";
-import { ReplayIntroButton } from "@/components/common/ReplayIntroButton";
 import { type BankAccount, venueLabel, wedding } from "@/data/wedding";
 import { useShare } from "@/hooks/useShare";
 import { contactGroups } from "@/lib/contacts";
@@ -204,7 +203,6 @@ export function Ending() {
           {copied ? "복사했어요" : "링크 복사"}
         </button>
       </div>
-      <ReplayIntroButton className="mx-auto mt-10 text-ink/50" />
     </section>
   );
 }

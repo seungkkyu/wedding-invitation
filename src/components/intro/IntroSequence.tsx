@@ -43,6 +43,16 @@ class Cancelled extends Error {}
 
 export function IntroGate() {
   const playing = useIntroStore((s) => s.phase !== "done");
+
+  // 인트로 도중에 다른 디자인으로 이동했다가 돌아오면 중간 단계가 아니라 처음부터 재생한다
+  useEffect(
+    () => () => {
+      const { phase, replay } = useIntroStore.getState();
+      if (phase !== "done") replay();
+    },
+    [],
+  );
+
   return <AnimatePresence>{playing && <IntroSequence key="intro" />}</AnimatePresence>;
 }
 

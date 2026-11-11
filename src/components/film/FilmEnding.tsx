@@ -2,7 +2,6 @@
 
 import { motion } from "motion/react";
 import { Icon } from "@/components/common/Icon";
-import { ReplayIntroButton } from "@/components/common/ReplayIntroButton";
 import { useShare } from "@/hooks/useShare";
 import { FILM } from "./parts";
 
@@ -49,8 +48,6 @@ export function FilmEnding() {
           {copied ? "복사되었습니다" : "링크 복사"}
         </button>
       </div>
-
-      <ReplayIntroButton className={`mx-auto mt-10 ${FILM.muted}`} />
 
       <p className={`mt-16 font-display text-2xl italic ${FILM.muted}`}>Fin.</p>
     </footer>
