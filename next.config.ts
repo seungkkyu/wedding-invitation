@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/",
-        has: [{ type: "query", key: "v", value: "(?<v>pixel|film|magazine|letter|scrapbook)" }],
+        has: [{ type: "query", key: "v", value: "(?<v>pixel|film|magazine|letter|scrapbook|haru|light|stars|train|seasons)" }],
         destination: "/:v",
         permanent: true,
       },

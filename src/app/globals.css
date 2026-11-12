@@ -9,6 +9,7 @@
   --color-night: #1c1b33;
   --color-gold: #e8c879;
 
+
   /* 도트 스프라이트 2프레임 순환 (PixelSprite) */
   --animate-walk: walk 0.36s steps(2) infinite;
   --animate-twinkle: twinkle 1.6s steps(2) infinite;
@@ -16,6 +17,61 @@
   --animate-flicker: flicker 1.2s steps(3) infinite;
   --animate-drift: drift 3.2s linear infinite;
   --animate-wave: wave 1.6s steps(4) infinite;
+  /* 하루: 구름이 천천히 흘러감 */
+  --animate-cloud: cloud 70s linear infinite;
+  /* 창가: 볕 속 나뭇잎 그림자가 바람에 살랑임 */
+  --animate-leaves: leaves 7s ease-in-out infinite alternate;
+  /* 창밖: 풍경 띠가 왼쪽으로 흘러감 (띠 너비의 절반만큼 = 한 바퀴) */
+  --animate-pan: pan 40s linear infinite;
+  /* 계절: 눈송이와 반딧불 */
+  --animate-snow: snow 11s linear infinite;
+  --animate-firefly: firefly 6s ease-in-out infinite;
+
+  @keyframes leaves {
+    from {
+      transform: rotate(-1.5deg) translate(0, 0);
+    }
+    to {
+      transform: rotate(1.8deg) translate(6px, 4px);
+    }
+  }
+
+  @keyframes pan {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes snow {
+    from {
+      transform: translate(0, -10vh);
+    }
+    to {
+      transform: translate(30px, 110vh);
+    }
+  }
+
+  @keyframes firefly {
+    0%,
+    100% {
+      transform: translate(0, 0);
+      opacity: 0.15;
+    }
+    50% {
+      transform: translate(14px, -46px);
+      opacity: 1;
+    }
+  }
+
+  @keyframes cloud {
+    from {
+      transform: translateX(-40%);
+    }
+    to {
+      transform: translateX(140%);
+    }
+  }
+
 
   @keyframes walk {
     to {
@@ -147,7 +203,12 @@
   .animate-petal,
   .animate-flicker,
   .animate-drift,
-  .animate-wave {
+  .animate-wave,
+  .animate-cloud,
+  .animate-leaves,
+  .animate-pan,
+  .animate-snow,
+  .animate-firefly {
     animation: none;
   }
 }
@@ -164,6 +225,7 @@
   --font-garamond: var(--font-cormorant), var(--font-gowun-batang), serif;
   --font-hand: var(--font-nanum-pen), cursive;
   --font-hand-en: var(--font-caveat), var(--font-nanum-pen), cursive;
+  --font-hahmlet: var(--font-hahmlet), var(--font-gowun-batang), serif;
 }
 
 /* 개인 사진 보호: iOS 길게 누르기 저장 메뉴, 선택, 끌어서 저장을 막는다 (우클릭은 ImageGuard에서) */

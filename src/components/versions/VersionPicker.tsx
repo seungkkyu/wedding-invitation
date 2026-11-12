@@ -3,17 +3,18 @@ import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { venueLabel, wedding } from "@/data/wedding";
 import { formatWeddingDate, formatWeddingDateDots } from "@/lib/date";
+import { haruFont } from "@/lib/fonts";
 import { VERSIONS, type VersionId, versionHref } from "@/lib/versions";
 
 const { groom, bride } = wedding;
 
 /**
- * 홈: 다섯 가지 청첩장 디자인 중 하나를 고르는 화면.
+ * 홈: 여러 청첩장 디자인 중 하나를 고르는 화면.
  * 각 항목은 해당 디자인의 표지를 축소한 견본처럼 그 디자인의 색과 글꼴로 그린다.
  */
 export function VersionPicker() {
   return (
-    <main className="mx-auto min-h-dvh max-w-[480px] bg-[#efedea] text-ink shadow-[0_0_40px_rgba(47,42,37,0.08)]">
+    <main className={`${haruFont} mx-auto min-h-dvh max-w-[480px] bg-[#efedea] text-ink shadow-[0_0_40px_rgba(47,42,37,0.08)]`}>
       <header className="px-7 pt-16 pb-10">
         <h1 className="font-serif text-[2rem] leading-tight font-bold tracking-tight text-balance">
           {groom.name}
@@ -26,7 +27,7 @@ export function VersionPicker() {
           {venueLabel}
         </p>
         <p className="mt-8 text-[15px] leading-relaxed text-pretty text-ink/80">
-          같은 초대를 다섯 가지 모습으로 준비했어요. 마음이 가는 디자인으로 열어 보세요.
+          같은 초대를 {VERSIONS.length}가지 모습으로 준비했어요. 마음이 가는 디자인으로 열어 보세요.
         </p>
       </header>
 
@@ -106,6 +107,71 @@ function Swatch({ id, label, description }: SwatchProps) {
           </div>
           <Caption label={label} description={description} className="font-hand text-[1.3rem]" muted="text-ink/60" />
           <p className="absolute bottom-6 left-6 -rotate-2 font-hand text-2xl text-[#b0563f]">우리 결혼해요!</p>
+        </div>
+      );
+    case "haru":
+      return (
+        <div className="relative h-48 overflow-hidden bg-[linear-gradient(90deg,#2a2d5a_0%,#a7727f_22%,#9ec3dc_40%,#5f9fcf_55%,#a85a6a_78%,#0c1330_100%)] px-6 py-6 text-white">
+          <span aria-hidden className="absolute right-10 bottom-8 size-10 rounded-full bg-[#fffbea]/90" />
+          <Caption label={label} description={description} className="relative font-hahmlet" muted="text-white/80" />
+          <p className="absolute bottom-5 left-6 font-hahmlet text-[2.6rem] leading-none font-extralight tabular-nums">05:40</p>
+        </div>
+      );
+    case "light":
+      return (
+        <div className="relative h-48 overflow-hidden bg-[#e3e1db] px-6 py-6 text-[#3a342e]">
+          {/* 벽에 떨어진 창 모양 볕 */}
+          <div aria-hidden className="absolute top-6 right-8 grid h-32 w-28 skew-y-[-10deg] grid-cols-2 gap-1.5 opacity-90">
+            {[0, 1, 2, 3].map((i) => (
+              <span key={i} className="bg-[#fffaf0] shadow-[0_0_12px_4px_#fffaf0]" />
+            ))}
+          </div>
+          <Caption label={label} description={description} className="relative font-serif" muted="text-[#3a342e]/65" />
+        </div>
+      );
+    case "stars":
+      return (
+        <div className="relative h-48 overflow-hidden bg-[linear-gradient(180deg,#05081a,#18183a)] px-6 py-6 text-[#e9ebf6]">
+          {[
+            ["20%", "62%"],
+            ["38%", "80%"],
+            ["64%", "70%"],
+            ["74%", "90%"],
+            ["16%", "88%"],
+          ].map(([top, left]) => (
+            <span key={top + left} aria-hidden className="absolute size-0.5 rounded-full bg-white/70" style={{ top, left }} />
+          ))}
+          <svg aria-hidden viewBox="0 0 200 100" className="absolute right-4 bottom-4 h-24 w-48">
+            <path d="M20 70 Q100 20 180 60" fill="none" stroke="#f5f2ea" strokeWidth="1" strokeDasharray="2 6" strokeLinecap="round" />
+            <circle cx="20" cy="70" r="3" fill="#e9ecff" />
+            <circle cx="180" cy="60" r="3" fill="#fff1dc" />
+          </svg>
+          <Caption label={label} description={description} className="relative font-headline" muted="text-[#e9ebf6]/65" />
+        </div>
+      );
+    case "train":
+      return (
+        <div className="relative h-48 overflow-hidden bg-[#38332e] p-2">
+          <div className="relative h-full overflow-hidden rounded-[22px] bg-[linear-gradient(180deg,#b9dbee,#eef2e2)] px-5 py-5 text-[#26302c]">
+            <svg aria-hidden viewBox="0 0 400 60" preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 h-14 w-full">
+              <path d="M0 30 C80 10 160 10 240 30 S360 40 400 30 V60 H0Z" fill="#a5bca0" />
+              <rect y="46" width="400" height="14" fill="#8ea86c" />
+            </svg>
+            <Caption label={label} description={description} className="relative font-bold" muted="text-[#26302c]/65" />
+          </div>
+        </div>
+      );
+    case "seasons":
+      return (
+        <div className="relative grid h-48 grid-cols-4 overflow-hidden">
+          <span className="bg-[#f4e4e4]" />
+          <span className="bg-[#173a31]" />
+          <span className="bg-[#e7bf8f]" />
+          <span className="bg-[#d3dce4]" />
+          <div className="absolute inset-0 flex flex-col justify-between px-6 py-6 text-[#2b3a2e]">
+            <Caption label={label} description={description} className="w-fit rounded-md bg-[#fbf6e6]/85 px-2 py-1 font-serif" muted="text-[#2b3a2e]/65" />
+            <p className="w-fit rounded-md bg-[#fbf6e6]/85 px-2 font-garamond text-3xl font-light lining-nums">2015 – 2027</p>
+          </div>
         </div>
       );
   }

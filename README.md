@@ -9,6 +9,11 @@
 | 매거진 | `src/components/magazine` | 웨딩 매거진 커버, 목차, 에디터스 레터, 화보 스프레드 |
 | 레터 | `src/components/letter` | 왁스 씰 봉투 오프닝, 아치 프레임, 반투명 카드, 캐러셀 |
 | 스크랩 | `src/components/scrapbook` | 다이어리 꾸미기: 폴라로이드 카드 넘기기, 마스킹테이프, 손글씨 |
+| 하루 | `src/components/haru` | 스크롤이 예식 날 하루: 새벽→예식 시각→노을→밤으로 하늘·해·달·별이 바뀜 |
+| 창가 | `src/components/light` | 벽에 떨어진 창 모양 볕이 아침부터 저녁까지 자리를 옮기고, 볕 속 잎 그림자가 흔들림 |
+| 별밤 | `src/components/stars` | 처음 만난 밤하늘이 스크롤만큼 돌고(캔버스), 끝에서 까치들이 견우·직녀 사이에 오작교를 놓음 |
+| 창밖 | `src/components/train` | 기차 창밖 풍경이 역마다 바뀜(도시→들판→강→예식장→바다→밤), 역명판 헤더 |
+| 계절 | `src/components/seasons` | 처음 만난 해부터 해마다 한 장: 그해 우리의 일과 세상의 일, 배경 계절이 그해 기억을 따라감 |
 
 Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · motion · zustand
 
@@ -63,6 +68,7 @@ npm run dev                  # http://localhost:3000
 
 | 항목 | 필드 |
 |---|---|
+| 계절 버전 | `years` — 해마다 `us`(두 사람의 일, 임시)와 `world`(그해 세상의 일). 그해 `story` 순간이 있으면 그 날짜·제목·글이 우선 |
 | 사진 | `gallery` — 첫 장(`coverPhoto`)은 각 버전의 커버와 링크 미리보기 이미지로, 둘째 장(`secondaryPhoto`)은 인사말 배경으로 쓰인다 |
 | 인사말 | `greeting` (빈 문자열 `""`은 줄바꿈 한 줄) |
 | 계좌번호 | `accounts.groom` / `accounts.bride` |
@@ -81,11 +87,11 @@ npm run dev                  # http://localhost:3000
 { src: "/images/gallery/06.jpg", width: 1600, height: 1200, caption: "Jeju, Spring" },
 ```
 
-다섯 버전 모두 `gallery` 전체를 순서대로 보여 준다.
+모든 버전이 `gallery` 전체를 순서대로 보여 준다.
 
 ## 디자인별 페이지
 
-- `/` 홈에서 디자인을 고르면 `/pixel` `/film` `/magazine` `/letter` `/scrapbook` 페이지로 이동한다. 링크를 공유하면 그 디자인으로 바로 열린다.
+- `/` 홈에서 디자인을 고르면 `/pixel` `/film` `/magazine` `/letter` `/scrapbook` `/haru` `/light` `/stars` `/train` `/seasons` 페이지로 이동한다. 링크를 공유하면 그 디자인으로 바로 열린다.
 - 도트 인트로(날수 카운트 → 궁전 입장)는 `/pixel`에서만 재생된다.
 - 각 페이지 위의 탭으로 다른 디자인이나 홈으로 이동한다. 아래로 스크롤하면 숨고, 위로 올리면 다시 나온다.
 - 예전 링크(`/?v=film`)는 해당 경로로 리다이렉트된다 (`next.config.ts`).
@@ -95,7 +101,8 @@ npm run dev                  # http://localhost:3000
 1. `src/components/<이름>/<이름>Invitation.tsx`를 만들고 컴포넌트를 export한다.
 2. [`src/lib/versions.ts`](src/lib/versions.ts)의 `VERSIONS`에 `{ id, label, description }`을 추가한다.
 3. `src/app/<이름>/page.tsx`에서 컴포넌트와 `VersionTabs`를 렌더하고, 홈 견본은 [`VersionPicker.tsx`](src/components/versions/VersionPicker.tsx)의 `Swatch`에 추가한다. `next.config.ts` 리다이렉트 목록에도 이름을 넣는다.
-4. 테마 전용 폰트가 필요하면 `src/app/layout.tsx`에 `preload: false`로 추가하고, `globals.css`의 `@theme inline`에 `--font-*`를 등록한다.
+4. 테마 전용 폰트는 `src/lib/fonts/<이름>.ts`에 따로 두고 페이지를 감싸는 요소에 변수 클래스를 단다 (루트 레이아웃에 두면 모든 페이지 CSS에 `@font-face`가 붙는다). 홈 견본에서도 쓰면 `VersionPicker`의 `<main>`에도 단다. `globals.css`의 `@theme inline`에 `--font-*`를 등록한다. body로 포털을 띄우는 `Lightbox` 안에서는 이 폰트 변수가 상속되지 않는다.
+   한글 폰트는 유니코드 조각이 수십 개라 `preload: false`로 둔다 (미리 받으면 페이지마다 수백 KB를 먼저 내려받는다).
 
 데이터·기능은 아래 공통 모듈을 쓰고, 테마 폴더에는 모양(마크업·스타일)만 둔다.
 
@@ -129,7 +136,7 @@ npm run dev                  # http://localhost:3000
 src/
   app/            layout(폰트·메타데이터), page, globals.css(Tailwind 테마 토큰)
   data/           wedding.ts — 청첩장 내용
-  lib/            날짜·연락처·계좌·지도·환경 변수 등 순수 로직
+  lib/            날짜·연락처·계좌·지도·환경 변수 등 순수 로직 (+ fonts/ 디자인 전용 폰트)
   hooks/          공통 훅
   store/          zustand 스토어 (인트로 단계, 선택된 버전)
   components/
@@ -138,6 +145,8 @@ src/
     versions/     버전 탭과 전환
     invitation/   도트 버전 (+ pixel/ 도트 스프라이트)
     film/ magazine/ letter/ scrapbook/
+    ambient/      하루·창가·별밤·창밖·계절 공용 블록 (예식 정보·갤러리·연락처·계좌·공유, Tone으로 색만 바꿈)
+    haru/ light/ stars/ train/ seasons/   배경 연출 + 장면 구성
 public/images/gallery/   사진
 ```
 

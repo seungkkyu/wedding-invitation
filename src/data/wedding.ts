@@ -33,6 +33,17 @@ export type StoryChapter = {
   title: string;
 };
 
+/** 계절 버전: 해마다 한 장. 그해 두 사람의 일과 그해 모두가 기억하는 일 */
+export type YearNote = {
+  year: number;
+  /** 두 사람의 기억이 있던 달 (배경 계절이 이 달을 따른다). 그해 스토리 순간이 있으면 그 날짜가 우선 */
+  month: number;
+  /** 그해 두 사람의 일. 그해 스토리 순간이 있으면 생략해도 된다 */
+  us?: string;
+  /** 그해 세상은 */
+  world: string;
+};
+
 export type BankAccount = {
   holder: string;
   bank: string;
@@ -100,6 +111,22 @@ export const wedding = {
     { until: 2025, outfit: "office", title: "같은 퇴근길" },
     { outfit: "wedding", title: "그리고, 평생" },
   ] satisfies StoryChapter[],
+  // 계절 버전의 해마다 한 장 (us는 임시 내용 — 두 사람의 기억으로 바꿔 주세요).
+  // world는 그해 많은 사람이 기억하는 일. 그해 story 순간이 있으면 us 대신 그 순간이 쓰인다
+  years: [
+    { year: 2015, month: 7, world: "드라마 〈응답하라 1988〉이 첫 방송을 했다" },
+    { year: 2016, month: 8, world: "알파고와 이세돌 9단이 바둑을 두었다" },
+    { year: 2017, month: 10, us: "(임시) 처음으로 함께 맞은 가을 단풍", world: "방탄소년단이 빌보드 뮤직 어워드에서 처음 상을 받았다" },
+    { year: 2018, month: 2, us: "(임시) 눈 오던 날의 기억", world: "평창 동계올림픽이 열렸다" },
+    { year: 2019, month: 5, us: "(임시) 봄날의 소풍", world: "영화 〈기생충〉이 칸 영화제 황금종려상을 받았다" },
+    { year: 2020, month: 12, world: "코로나19로 마스크가 일상이 되었다" },
+    { year: 2021, month: 9, us: "(임시) 가을 산책길", world: "〈오징어 게임〉이 전 세계 1위에 올랐다" },
+    { year: 2022, month: 12, us: "(임시) 새벽까지 함께 본 월드컵", world: "카타르 월드컵에서 포르투갈을 꺾고 16강에 올랐다" },
+    { year: 2023, month: 4, us: "(임시) 다시 마스크 없이 걸은 벚꽃길", world: "실내 마스크 의무가 풀렸다" },
+    { year: 2024, month: 8, us: "(임시) 여름 휴가", world: "한강 작가가 노벨 문학상을 받았다" },
+    { year: 2025, month: 10, us: "(임시) 가을의 어느 날", world: "〈케이팝 데몬 헌터스〉 노래가 어디서나 흘러나왔다" },
+    { year: 2026, month: 3, world: "북중미 월드컵이 열렸다" },
+  ] satisfies YearNote[],
   venue: {
     name: env(process.env.NEXT_PUBLIC_VENUE_NAME, "아무개웨딩홀"),
     hall: env(process.env.NEXT_PUBLIC_VENUE_HALL, "아무개홀"),
