@@ -2,10 +2,10 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { type ReactNode, useEffect, useSyncExternalStore } from "react";
+import { type ReactNode, useEffect, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import type { Photo } from "@/data/wedding";
-import { useScrollLock } from "@/hooks/useScrollLock";
+import { dialogProps, useDialog } from "@/hooks/useDialog";
 import { Icon } from "./Icon";
 
 const SWIPE_THRESHOLD = 60;
@@ -57,25 +57,25 @@ function LightboxView({
   renderCaption = (photo) => photo.caption,
   imageClassName = "",
 }: Omit<LightboxProps, "index"> & { index: number }) {
-  useScrollLock();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialog(dialogRef, onClose);
   const photo = photos[index];
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-      else if (event.key === "ArrowLeft") onMove(-1);
+      if (event.key === "ArrowLeft") onMove(-1);
       else if (event.key === "ArrowRight") onMove(1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, onMove]);
+  }, [onMove]);
 
   return (
     <motion.div
-      role="dialog"
-      aria-modal
+      ref={dialogRef}
+      {...dialogProps}
       aria-label="사진 크게 보기"
-      className={`fixed inset-0 z-40 flex flex-col ${className}`}
+      className={`fixed inset-0 z-40 flex flex-col outline-none ${className}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

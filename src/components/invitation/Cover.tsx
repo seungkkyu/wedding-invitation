@@ -1,7 +1,8 @@
+import Image from "next/image";
 import { Bride, Groom } from "@/components/pixel/Characters";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { BUSH_FRAMES, BUSH_PALETTE, HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
-import { venueLabel, wedding } from "@/data/wedding";
+import { coverPhoto, venueLabel, wedding } from "@/data/wedding";
 import { formatWeddingDate, formatWeddingDateDots } from "@/lib/date";
 import { EasterEgg } from "./EasterEgg";
 
@@ -10,9 +11,20 @@ export function Cover() {
 
   return (
     <section className="flex min-h-dvh flex-col">
-      {/* TODO: 대표 사진으로 교체 (next/image). 사진을 빠르게 5번 누르면 이스터에그 */}
-      <EasterEgg className="relative mx-6 mt-16 flex flex-1 items-center justify-center bg-ivory pixel-box">
-        <span className="font-pixel text-xs text-muted">Main Photo</span>
+      {/* 대표 사진. 빠르게 5번 누르면 이스터에그 */}
+      <EasterEgg className="relative mx-6 mt-16 flex min-h-64 flex-1 items-center justify-center overflow-hidden bg-ivory pixel-box">
+        {coverPhoto ? (
+          <Image
+            src={coverPhoto.src}
+            alt={`${groom.name}와 ${bride.name}`}
+            fill
+            preload
+            sizes="(max-width: 480px) 90vw, 432px"
+            className="object-cover"
+          />
+        ) : (
+          <span className="font-pixel text-xs text-muted">Main Photo</span>
+        )}
       </EasterEgg>
 
       <div className="px-8 pt-10 text-center font-pixel">

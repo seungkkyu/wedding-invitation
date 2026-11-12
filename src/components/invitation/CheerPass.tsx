@@ -1,11 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { PLANE_FRAMES, PLANE_PALETTE } from "@/components/pixel/sprites";
 import { wedding } from "@/data/wedding";
-import { useScrollLock } from "@/hooks/useScrollLock";
+import { dialogProps, useDialog } from "@/hooks/useDialog";
 import { type Cheer, Departure } from "./Departure";
 
 // 현수막 한 줄에 들어가도록 길이를 제한한다
@@ -18,7 +18,8 @@ type Step = "folded" | "composing" | "departing" | "issued";
 function Composer({ initial, onCancel, onSend }: { initial?: Cheer; onCancel: () => void; onSend: (cheer: Cheer) => void }) {
   const [name, setName] = useState(initial?.name ?? "");
   const [message, setMessage] = useState(initial?.message ?? "");
-  useScrollLock();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialog(dialogRef, onCancel);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
@@ -27,7 +28,10 @@ function Composer({ initial, onCancel, onSend }: { initial?: Cheer; onCancel: ()
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-night/70 overscroll-contain"
+      ref={dialogRef}
+      {...dialogProps}
+      aria-label="축하 한마디 보내기"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-night/70 overscroll-contain outline-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

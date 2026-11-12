@@ -13,8 +13,9 @@ import {
 } from "next/font/google";
 import localFont from "next/font/local";
 import { ImageGuard } from "@/components/common/ImageGuard";
-import { venueLabel, wedding } from "@/data/wedding";
+import { coverPhoto, venueLabel, wedding } from "@/data/wedding";
 import { formatWeddingDate } from "@/lib/date";
+import { siteUrl } from "@/lib/env";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -73,9 +74,22 @@ const cormorant = Cormorant_Garamond({
 const nanumPen = Nanum_Pen_Script({ variable: "--font-nanum-pen", weight: "400", subsets: ["latin"], preload: false });
 const caveat = Caveat({ variable: "--font-caveat", weight: ["400", "600"], subsets: ["latin"], preload: false });
 
+const title = `${wedding.groom.name} ♥ ${wedding.bride.name} 결혼합니다`;
+const description = `${formatWeddingDate()} ${venueLabel}`;
+
 export const metadata: Metadata = {
-  title: `${wedding.groom.name} ♥ ${wedding.bride.name} 결혼합니다`,
-  description: `${formatWeddingDate()} ${venueLabel}`,
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  // 카카오톡·문자 등으로 링크를 보낼 때 뜨는 미리보기
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    title,
+    description,
+    images: coverPhoto && [{ url: coverPhoto.src, width: coverPhoto.width, height: coverPhoto.height, alt: title }],
+  },
+  twitter: { card: "summary_large_image" },
   robots: { index: false, follow: false },
 };
 

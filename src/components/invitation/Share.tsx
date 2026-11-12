@@ -3,7 +3,7 @@
 import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { Icon } from "@/components/common/Icon";
-import { ReplayIntroButton } from "@/components/common/ReplayIntroButton";
+import { ReplayIntroButton } from "./ReplayIntroButton";
 import { useShare } from "@/hooks/useShare";
 import { EasterEgg } from "./EasterEgg";
 
@@ -21,7 +21,7 @@ export function Share() {
           className="flex items-center justify-center gap-1.5 bg-[#fee500] min-h-12 text-xs text-[#191919] pixel-btn [--pixel-border:#fee500]"
         >
           <Icon name="share" />
-          카카오톡 공유
+          공유하기
         </button>
         <button
           type="button"

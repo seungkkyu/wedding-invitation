@@ -37,7 +37,7 @@ export function FilmEnding() {
           className="flex items-center justify-center gap-1.5 bg-[#efe6d6] py-3.5 text-[13px] text-[#1c1915]"
         >
           <Icon name="share" />
-          카카오톡 공유
+          공유하기
         </button>
         <button
           type="button"

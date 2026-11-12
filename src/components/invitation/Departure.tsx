@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useAnimate, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/common/Icon";
 import { Bride, Groom } from "@/components/pixel/Characters";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
@@ -14,7 +14,7 @@ import {
   PLANE_PALETTE,
 } from "@/components/pixel/sprites";
 import { wedding } from "@/data/wedding";
-import { useScrollLock } from "@/hooks/useScrollLock";
+import { dialogProps, useDialog } from "@/hooks/useDialog";
 
 const STARS = [
   { top: "6%", left: "14%" },
@@ -54,7 +54,8 @@ export function Departure({ onClose, cheer }: { onClose: () => void; cheer?: Che
   const [walking, setWalking] = useState(false);
   const reduceMotion = useReducedMotion();
   const { groom, bride, honeymoon } = wedding;
-  useScrollLock();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialog(dialogRef, onClose);
 
   useEffect(() => {
     let cancelled = false;
@@ -122,12 +123,13 @@ export function Departure({ onClose, cheer }: { onClose: () => void; cheer?: Che
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 bg-night"
+      ref={dialogRef}
+      className="fixed inset-0 z-50 bg-night outline-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      role="dialog"
+      {...dialogProps}
       aria-label={`${honeymoon.to.name}로 떠나는 신혼여행`}
     >
       <div

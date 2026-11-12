@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { wedding, type Person } from "@/data/wedding";
+import { type Person, secondaryPhoto, wedding } from "@/data/wedding";
 import { parentsOf } from "@/lib/contacts";
 import { LetterSection, Sprig } from "./Ornament";
 
@@ -15,7 +15,7 @@ function ParentsLine({ person }: { person: Person }) {
 
 /** 흐릿한 사진 위에 반투명 종이(벨럼)를 한 장 덧댄 인사말 */
 export function LetterGreeting() {
-  const backdrop = wedding.gallery[1] ?? wedding.gallery[0];
+  const backdrop = secondaryPhoto;
 
   return (
     <div className="relative overflow-hidden">

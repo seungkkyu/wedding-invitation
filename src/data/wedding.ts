@@ -150,5 +150,11 @@ export const wedding = {
   ] as Photo[],
 };
 
+/** 버전별 커버 사진 (갤러리 첫 장). 갤러리가 비어 있으면 undefined → 플레이스홀더 */
+export const coverPhoto: Photo | undefined = wedding.gallery[0];
+
+/** 커버와 다른 두 번째 사진 (인사말 배경 등). 한 장뿐이면 커버 사진 */
+export const secondaryPhoto: Photo | undefined = wedding.gallery[1] ?? wedding.gallery[0];
+
 /** "지타워컨벤션 3층 그랜드홀"처럼 장소와 홀 이름을 붙인 표기 (홀 이름이 비어 있으면 장소만) */
 export const venueLabel = [wedding.venue.name, wedding.venue.hall].filter(Boolean).join(" ");

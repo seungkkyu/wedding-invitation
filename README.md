@@ -50,6 +50,7 @@ npm run dev                  # http://localhost:3000
 | `NEXT_PUBLIC_VENUE_ADDRESS` | | `서울특별시 아무구 아무로 123` | 주소 |
 | `NEXT_PUBLIC_VENUE_TEL` | | `02-000-0000` | 대표번호 |
 | `NEXT_PUBLIC_INTRO_ENABLED` | `true` | `true` | 첫 진입 인트로 애니메이션. `false`면 바로 청첩장이 보이고 '인트로 다시 보기' 버튼도 숨겨진다 |
+| `NEXT_PUBLIC_SITE_URL` | `https://우리도메인.com` | Vercel 운영 도메인 → `http://localhost:3000` | 배포 주소. 카카오톡 등 링크 미리보기 이미지에 쓰인다 |
 
 - **값을 바꾼 뒤에는 dev 서버를 재시작하거나 다시 배포해야 한다.** `NEXT_PUBLIC_` 값은 빌드할 때 코드에 박힌다.
 - 기본값은 [`src/data/wedding.ts`](src/data/wedding.ts)에서 바꿀 수 있다. 계좌 예금주 이름도 위 이름 값을 따른다.
@@ -62,7 +63,7 @@ npm run dev                  # http://localhost:3000
 
 | 항목 | 필드 |
 |---|---|
-| 사진 | `gallery` — 첫 장은 각 버전의 커버로도 쓰인다 |
+| 사진 | `gallery` — 첫 장(`coverPhoto`)은 각 버전의 커버와 링크 미리보기 이미지로, 둘째 장(`secondaryPhoto`)은 인사말 배경으로 쓰인다 |
 | 인사말 | `greeting` (빈 문자열 `""`은 줄바꿈 한 줄) |
 | 계좌번호 | `accounts.groom` / `accounts.bride` |
 | 교통 안내 | `venue.transport` |
@@ -105,13 +106,13 @@ npm run dev                  # http://localhost:3000
 | UI | `common/Lightbox` | 사진 전체 화면 보기 (스와이프·이전/다음·Esc·방향키). body로 포털을 띄워 어디서 열어도 화면을 덮는다. `className`, `renderCounter`, `renderCaption`으로 테마별 모양 |
 | UI | `common/CallButtons` | 전화·문자 버튼. 번호가 없으면 그리지 않음 |
 | UI | `common/CopyButton` | 복사 버튼 (`label`, `copiedLabel`, `icon`, `className`). 내용이 없으면 그리지 않음 |
-| UI | `common/ReplayIntroButton` | '인트로 다시 보기'. 인트로를 끄면 숨김 |
 | UI | `common/ImageGuard` | 사진 우클릭·길게 누르기·드래그 저장 막기 (전역, `layout.tsx`) |
-| UI | `common/Section`, `common/Icon` | 도트 버전 섹션 틀, 라인 아이콘 |
+| UI | `common/Icon` | 라인 아이콘 |
 | 훅 | `useLightbox(count)` | 사진 보기 상태 `{ index, open, close, move }` (끝에서 처음으로 순환) |
 | 훅 | `useCountdown()` / `useDday()` | 예식까지 남은 시간(1초 갱신) / 남은 일수. 서버에서는 `null` |
 | 훅 | `useShare()` | 공유(Web Share → 링크 복사 폴백), 링크 복사 |
 | 훅 | `useCopy()`, `useScrollLock()` | 클립보드 복사, 오버레이가 떠 있는 동안 스크롤 잠금 |
+| 훅 | `useDialog(ref, onClose)` + `dialogProps` | 화면 위에 뜨는 창 공통: 스크롤 잠금, ESC로 닫기(맨 위 창만), 열릴 때 창으로 / 닫힐 때 연 버튼으로 포커스 이동 |
 | 데이터 | `lib/contacts` | `contactGroups` (신랑측/신부측 연락처), `parentsOf(person)` |
 | 데이터 | `lib/accounts` | `accountGroups`, `accountText(account)` |
 | 데이터 | `lib/venue` | `mapLinks` (네이버·카카오·티맵 길찾기) |

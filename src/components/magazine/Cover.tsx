@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { wedding } from "@/data/wedding";
+import { coverPhoto, wedding } from "@/data/wedding";
 import { formatWeddingDateDots } from "@/lib/date";
 
 const MONTHS = [
@@ -30,7 +30,7 @@ function Barcode() {
 
 export function Cover() {
   const { groom, bride, date, firstDay } = wedding;
-  const cover = wedding.gallery[0];
+  const cover = coverPhoto;
   const years = date.year - firstDay.year;
 
   return (

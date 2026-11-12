@@ -17,3 +17,13 @@ export const features = {
   /** 첫 진입 인트로 애니메이션 (함께한 날수 → 반지 → 궁전) */
   intro: envFlag(process.env.NEXT_PUBLIC_INTRO_ENABLED, true),
 };
+
+/**
+ * 배포 주소. 링크 미리보기(og:image 등)는 절대 URL이어야 해서 필요하다.
+ * NEXT_PUBLIC_SITE_URL → Vercel 운영 도메인(자동 제공) → 로컬 주소 순으로 쓴다.
+ */
+export const siteUrl =
+  env(process.env.NEXT_PUBLIC_SITE_URL) ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");

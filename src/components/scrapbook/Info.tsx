@@ -192,7 +192,7 @@ export function Ending() {
           className="flex items-center justify-center gap-1.5 rounded-xl bg-[#fee500] py-3.5 text-[13px] text-[#191919] shadow-[0_3px_0_rgba(70,50,25,0.15)]"
         >
           <Icon name="share" />
-          카카오톡 공유
+          공유하기
         </button>
         <button
           type="button"

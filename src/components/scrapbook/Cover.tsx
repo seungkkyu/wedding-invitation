@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { venueLabel, wedding } from "@/data/wedding";
+import { coverPhoto, venueLabel, wedding } from "@/data/wedding";
 import { useDday } from "@/hooks/useCountdown";
 import { formatWeddingDate, formatWeddingDateDots } from "@/lib/date";
 import { HeartSticker, Polaroid, StarSticker, Tape } from "./parts";
@@ -48,7 +48,7 @@ export function Cover() {
         <Tape tone="pink" className="absolute -top-3 left-6 z-10 w-24 -rotate-12" />
         <Tape tone="mint" className="absolute -top-2 right-8 z-10 w-20 rotate-[14deg]" />
         <DdaySticker />
-        <Polaroid photo={wedding.gallery[0]} sizes="(max-width: 480px) 82vw, 390px" preload />
+        <Polaroid photo={coverPhoto} sizes="(max-width: 480px) 82vw, 390px" preload />
       </motion.div>
 
       <h2 className="mt-10 flex items-center justify-center gap-3 font-hand text-[2.6rem] leading-none text-ink">

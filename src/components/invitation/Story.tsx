@@ -8,7 +8,7 @@ import { Bride, Groom } from "@/components/pixel/Characters";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { type Outfit, type SimpleDate, type StoryChapter, type StoryMoment, wedding } from "@/data/wedding";
-import { useScrollLock } from "@/hooks/useScrollLock";
+import { dialogProps, useDialog } from "@/hooks/useDialog";
 import { dateOfDayNumber, dayNumberOf, formatDots, formatFirstDayDots } from "@/lib/date";
 import { useIntroStore } from "@/store/introStore";
 import { EasterEgg } from "./EasterEgg";
@@ -258,17 +258,17 @@ function Timeline({ container }: { container: RefObject<HTMLDivElement | null> }
 function StorySheet({ onClose }: { onClose: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: containerRef });
-  useScrollLock();
+  useDialog(containerRef, onClose);
 
   return (
     <motion.div
       ref={containerRef}
-      className="fixed inset-0 z-40 mx-auto max-w-[480px] scrollbar-none overflow-y-auto overscroll-contain bg-night"
+      className="fixed inset-0 z-40 mx-auto max-w-[480px] scrollbar-none overflow-y-auto overscroll-contain bg-night outline-none"
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
       exit={{ y: "100%" }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      role="dialog"
+      {...dialogProps}
       aria-label="우리의 이야기"
     >
       <div className="sticky top-0 z-20 bg-night/85 backdrop-blur-sm">
@@ -309,10 +309,11 @@ export function Story() {
     else if (delta < -4) setHidden(false);
   });
 
+  // 시트가 열려 있어도 버튼은 그대로 둔다 (시트가 위를 덮고, 닫히면 포커스가 이 버튼으로 돌아온다)
   return (
     <>
       <AnimatePresence>
-        {introDone && !open && !hidden && (
+        {introDone && !hidden && (
           <motion.button
             type="button"
             onClick={() => setOpen(true)}

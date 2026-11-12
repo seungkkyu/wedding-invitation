@@ -2,7 +2,7 @@
 
 import { motion, type Variants } from "motion/react";
 import Image from "next/image";
-import { venueLabel, wedding } from "@/data/wedding";
+import { coverPhoto, venueLabel, wedding } from "@/data/wedding";
 import { formatWeddingDateDots } from "@/lib/date";
 import { FILM } from "./parts";
 
@@ -19,7 +19,7 @@ const line: Variants = {
 /** 오프닝 타이틀: 레터박스 속 대표 사진 + 크레딧 */
 export function TitleCard({ ready }: { ready: boolean }) {
   const { groom, bride } = wedding;
-  const cover = wedding.gallery[0];
+  const cover = coverPhoto;
 
   return (
     <motion.section

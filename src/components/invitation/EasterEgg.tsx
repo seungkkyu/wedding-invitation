@@ -7,6 +7,7 @@ import { Bride, Groom } from "@/components/pixel/Characters";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
 import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { wedding } from "@/data/wedding";
+import { dialogProps, useDialog } from "@/hooks/useDialog";
 
 // 탭 사이 간격이 TAP_GAP_MS 이내로 TAPS번 이어지면 열린다
 const TAPS = 5;
@@ -49,6 +50,8 @@ function Firework({ top, left, delay }: (typeof BURSTS)[number]) {
 }
 
 function Celebration({ onClose }: { onClose: () => void }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialog(dialogRef, onClose);
   useEffect(() => {
     const id = setTimeout(onClose, AUTO_CLOSE_MS);
     return () => clearTimeout(id);
@@ -58,7 +61,10 @@ function Celebration({ onClose }: { onClose: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 mx-auto max-w-[480px] cursor-pointer overflow-hidden bg-night/95"
+      ref={dialogRef}
+      {...dialogProps}
+      aria-label="축하 화면"
+      className="fixed inset-0 z-50 mx-auto max-w-[480px] cursor-pointer overflow-hidden bg-night/95 outline-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

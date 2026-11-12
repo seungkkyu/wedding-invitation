@@ -2,12 +2,12 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { wedding } from "@/data/wedding";
+import { secondaryPhoto, wedding } from "@/data/wedding";
 import { SceneTitle } from "./parts";
 
 /** SCENE 01: 어두운 스틸컷 위에 인사말이 자막처럼 한 줄씩 떠오른다 */
 export function Subtitles() {
-  const still = wedding.gallery[1] ?? wedding.gallery[0];
+  const still = secondaryPhoto;
   let lineIndex = 0;
 
   return (

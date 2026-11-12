@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import { venueLabel, wedding } from "@/data/wedding";
+import { coverPhoto, venueLabel, wedding } from "@/data/wedding";
 import { formatWeddingDate, formatWeddingDateDots } from "@/lib/date";
 import { Sprig } from "./Ornament";
 
@@ -35,7 +35,7 @@ function Petals() {
 
 export function LetterCover() {
   const { groom, bride } = wedding;
-  const photo = wedding.gallery[0];
+  const photo = coverPhoto;
 
   return (
     <section className="relative flex min-h-dvh flex-col items-center px-8 pt-20 pb-14 text-center">
