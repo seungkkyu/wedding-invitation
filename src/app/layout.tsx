@@ -27,11 +27,16 @@ const gowunBatang = Gowun_Batang({
   variable: "--font-gowun-batang",
   weight: ["400", "700"],
   subsets: ["latin"],
+  // 한글 글자 조각(unicode-range)이 90여 개라 미리 받으면 모든 페이지가 수백 KB를 먼저 내려받는다.
+  // 미리 받지 않아도 화면에 쓰인 글자의 조각만 그때그때 받는다
+  preload: false,
 });
 
 // 한글 도트 폰트 (Galmuri11, SIL OFL — fonts/Galmuri-OFL.txt)
+// 650KB라 도트 버전과 홈 견본에서 실제로 쓰일 때만 받는다 (도트 버전은 인트로가 그동안 화면을 채운다)
 const galmuri = localFont({
   variable: "--font-galmuri",
+  preload: false,
   src: [
     { path: "./fonts/Galmuri11.woff2", weight: "400" },
     { path: "./fonts/Galmuri11-Bold.woff2", weight: "700" },
