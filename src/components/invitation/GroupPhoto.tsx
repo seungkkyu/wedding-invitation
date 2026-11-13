@@ -5,7 +5,8 @@ import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Bride, Groom } from "@/components/pixel/Characters";
 import { PixelSection } from "@/components/pixel/PixelSection";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
-import { type Gender, guestLook, hashSeed } from "@/components/pixel/guestSprite";
+import { type Gender, guestLook, newSeed } from "@/components/pixel/guestSprite";
+import { WeddingHall } from "@/components/pixel/WeddingHall";
 import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { wedding } from "@/data/wedding";
 import { dialogProps, useDialog } from "@/hooks/useDialog";
@@ -68,27 +69,6 @@ const place = (slot: Slot, size: number) => ({
 
 const depth = (row: number) => ({ zIndex: 20 - row, filter: `brightness(${1 - row * 0.07})` });
 
-// ── 사진 배경: 벽, 전구 줄, 바닥 ──
-const BULB_COLORS = ["#e8c879", "#ff8fab", "#a5d8ff", "#ffffff"];
-
-function Backdrop() {
-  return (
-    <svg viewBox="0 0 120 90" preserveAspectRatio="none" shapeRendering="crispEdges" className="absolute inset-0 size-full" aria-hidden>
-      <rect width="120" height="90" fill="#2c2a5c" />
-      {Array.from({ length: 15 }, (_, i) => (
-        <rect key={i} x={i * 8 + 3} y="0" width="2" height="66" fill="#312f66" />
-      ))}
-      <rect y="9" width="120" height="0.6" fill="#1c1b33" />
-      {Array.from({ length: 15 }, (_, i) => (
-        <rect key={i} x={i * 8 + 3.5} y="9.5" width="1.6" height="2" fill={BULB_COLORS[i % BULB_COLORS.length]} />
-      ))}
-      <rect y="66" width="120" height="24" fill="#1f1e44" />
-      <rect y="66" width="120" height="1.2" fill="#3d3b6e" />
-      <rect x="40" y="67.2" width="40" height="22.8" fill="#6b2a3a" opacity="0.55" />
-    </svg>
-  );
-}
-
 // ── 사진 속 하객 ──
 function PhotoGuest({
   seed,
@@ -143,12 +123,11 @@ const GENDERS: { value: Gender; label: string }[] = [
 function JoinSheet({ onCancel, onJoin }: { onCancel: () => void; onJoin: (name: string, gender: Gender, seed: number) => void }) {
   const [name, setName] = useState("");
   const [gender, setGender] = useState<Gender>("male");
-  const [reroll, setReroll] = useState(0);
+  const [seed, setSeed] = useState(newSeed);
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialog(dialogRef, onCancel);
 
   const trimmed = name.trim();
-  const seed = hashSeed(`${trimmed}#${reroll}`);
   const look = useMemo(() => guestLook(seed, gender), [seed, gender]);
 
   const submit = (event: FormEvent) => {
@@ -179,7 +158,7 @@ function JoinSheet({ onCancel, onJoin }: { onCancel: () => void; onJoin: (name: 
         <p className="text-lg text-accent">Group Photo</p>
         <h3 className="mt-2 text-sm text-ink">단체사진에 들어갈 내 캐릭터</h3>
 
-        {/* 미리보기: 이름을 바꾸면 모습도 바뀐다 */}
+        {/* 미리보기: 성별을 바꾸거나 '다른 모습'을 누를 때만 바뀐다 */}
         <div className="mt-6 flex items-end gap-5">
           <div className="flex h-24 w-20 shrink-0 items-end justify-center border-b-4 border-line">
             <PixelSprite {...look} animated className="h-20 w-15" />
@@ -203,7 +182,7 @@ function JoinSheet({ onCancel, onJoin }: { onCancel: () => void; onJoin: (name: 
             </div>
             <button
               type="button"
-              onClick={() => setReroll((n) => n + 1)}
+              onClick={() => setSeed(newSeed())}
               className="self-start border border-line px-3 py-1.5 text-xs text-ink"
             >
               다른 모습
@@ -286,9 +265,9 @@ export function GroupPhoto() {
       {/* 액자 */}
       <figure className="mt-8 bg-ivory p-3 pb-4 pixel-box">
         <div ref={photoRef} className="relative aspect-[4/3] overflow-hidden">
-          <Backdrop />
+          <WeddingHall className="absolute inset-0 size-full" />
 
-          <div className="absolute inset-x-0 top-[19%] z-30 flex items-center justify-center gap-2 font-pixel text-[11px] tracking-[0.3em] text-accent">
+          <div className="absolute inset-x-0 top-[10%] z-30 flex items-center justify-center gap-2 font-pixel text-[11px] tracking-[0.3em] text-accent">
             <PixelSprite frames={HEART_FRAMES} palette={HEART_PALETTE} className="h-2 w-[9px]" />
             JUST MARRIED
             <PixelSprite frames={HEART_FRAMES} palette={HEART_PALETTE} className="h-2 w-[9px]" />

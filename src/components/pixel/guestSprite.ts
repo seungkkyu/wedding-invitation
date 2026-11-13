@@ -1,23 +1,31 @@
 // 단체사진에 들어오는 하객 도트 캐릭터 (12x16, 걷기 2프레임).
-// 머리 모양 · 옷 · 색 · 안경을 seed로 골라 조합해서, 신랑·신부와 같은 그림체로 수백 가지가 나온다.
+// 신랑·신부와 같은 얼굴 틀에 머리 모양 · 옷 · 색을 seed로 골라 조합한다.
+// 색은 하객 옷차림처럼 차분한 톤에서만 고르고, 옷에는 한 단계 어두운 그늘(대문자)을 넣는다.
 
 type Frames = readonly (readonly string[])[];
 
 export type Gender = "male" | "female";
 
-const HAIRS: { gender: Gender; rows: string[] }[] = [
-  // 짧은 머리
+type Hair = { gender: Gender; rows: string[]; /** 어깨까지 내려오는 머리 */ long?: boolean };
+
+// 얼굴(눈 4·7번째 칸, 볼)은 모두 같고 머리만 다르다
+const HAIRS: Hair[] = [
+  // 짧은 머리 (신랑과 같은 모양)
   { gender: "male", rows: ["....hhhh....", "...hhhhhh...", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."] },
-  // 긴 머리
-  { gender: "female", rows: ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "..hsessesh..", "..hspsspsh..", "..hhsssshh.."] },
-  // 단발
-  { gender: "female", rows: ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "..hsessesh..", "..hspsspsh..", "...hssssh..."] },
-  // 모자
-  { gender: "male", rows: ["...cccccc...", "..cccccccc..", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."] },
-  // 까까머리
-  { gender: "male", rows: ["............", "....hhhh....", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."] },
-  // 묶은 머리
-  { gender: "female", rows: ["....hhhh.hh.", "...hhhhhhhh.", "...hsssshh..", "...sesses...", "...spssps...", "....ssss...."] },
+  // 옆으로 넘긴 앞머리
+  { gender: "male", rows: ["...hhhhh....", "..hhhhhhhh..", "..hhhhsssh..", "...sesses...", "...spssps...", "....ssss...."] },
+  // 넘긴 머리 + 구레나룻
+  { gender: "male", rows: ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "...sesses...", "...spssps...", "....ssss...."] },
+  // 긴 생머리
+  {
+    gender: "female",
+    long: true,
+    rows: ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "..hsessesh..", "..hspsspsh..", "..hhsssshh.."],
+  },
+  // 앞머리 있는 단발
+  { gender: "female", rows: ["...hhhhhh...", "..hhhhhhhh..", "..hhhhhhhh..", "..hsessesh..", "..hspsspsh..", "..hhsssshh.."] },
+  // 올림머리
+  { gender: "female", rows: [".....hh.....", "...hhhhhh...", "..hhsssshh..", "...sesses...", "...spssps...", "....ssss...."] },
 ];
 
 const PANTS_LEGS: Frames = [
@@ -30,50 +38,48 @@ const SKIRT_LEGS: Frames = [
   ["...s....s...", "...s....s...", "..nn....nn.."],
 ];
 
-const OUTFITS: { gender: Gender; body: string[]; legs: Frames }[] = [
-  // 정장
+type Outfit = { gender: Gender; body: string[]; legs: Frames };
+
+const OUTFITS: Outfit[] = [
+  // 정장 + 넥타이
   {
     gender: "male",
-    body: ["..kkkwwkkk..", ".kkkkbbkkkk.", ".kkkkbbkkkk.", ".skkkbbkkks.", "..kkkwwkkk..", "..qqqqqqqq..", "..qqq..qqq.."],
+    body: ["..kkkwwkkk..", ".Kkkkbbkkkk.", ".Kkkkbbkkkk.", ".sKkkbbkkKs.", "..kkkwwkkk..", "..qqqqqqqq..", "..qqq..qqq.."],
     legs: PANTS_LEGS,
   },
-  // 원피스
+  // 셔츠 + 슬랙스
+  {
+    gender: "male",
+    body: ["..tttwwttt..", ".Tttttttttt.", ".Tttttttttt.", ".sTttttttts.", "..Tttttttt..", "..qqqqqqqq..", "..qqq..qqq.."],
+    legs: PANTS_LEGS,
+  },
+  // 브이넥 원피스 + 허리띠
   {
     gender: "female",
-    body: ["...dddddd...", "..dddddddd..", "..sdddddds..", "...dddddd...", "..dddddddd..", "..dddddddd..", ".dddddddddd."],
+    body: ["...ddssdd...", "..dddddddd..", "..sdddddds..", "...DDDDDD...", "..dddddddd..", ".dddddddddd.", ".DDDDDDDDDD."],
     legs: SKIRT_LEGS,
-  },
-  // 니트 + 바지
-  {
-    gender: "male",
-    body: ["..tttttttt..", ".tttttttttt.", ".tttttttttt.", ".stttttttts.", "..tttttttt..", "..qqqqqqqq..", "..qqq..qqq.."],
-    legs: PANTS_LEGS,
   },
   // 블라우스 + 치마
   {
     gender: "female",
-    body: ["..wwwbbwww..", ".wwwwwwwwww.", ".swwwwwwwws.", "...dddddd...", "..dddddddd..", "..dddddddd..", ".dddddddddd."],
+    body: ["...wwwwww...", "..wwwwwwww..", "..swwwwwws..", "...dddddd...", "..dddddddd..", "..dddddddd..", "..DDDDDDDD.."],
     legs: SKIRT_LEGS,
   },
 ];
 
-const SKINS = ["#f6d2b4", "#efc4a2", "#e0ac86", "#c48a62"];
-const HAIR_COLORS = ["#1f1a17", "#3a2418", "#5a3820", "#7a4a2a", "#a0623a", "#d8b06a", "#8a8a96", "#c96f8a"];
-const HATS = ["#c0392b", "#3d6bb3", "#e8c879", "#3f8a55", "#2b2b3a"];
-const JACKETS = ["#2b2b3a", "#3a4d7a", "#4d5668", "#5a3d5a", "#2f5e4e", "#7a5a3e"];
-const TIES = ["#c0392b", "#3d6bb3", "#e8c879", "#e88aa6", "#3f8a55"];
-const DRESSES = ["#e88aa6", "#8fb8e8", "#f2d17a", "#b59ae0", "#7fcfaa", "#f0a07a", "#e9e4f5"];
-const KNITS = ["#c9584a", "#e8c879", "#7fa0d8", "#9a7fc4", "#5fa88a", "#e0a0b0", "#d9d4c8"];
-const PANTS = ["#3b3a4a", "#4a5a78", "#6b5a48", "#2b2b3a", "#7d8291"];
+const SKINS = ["#f6d2b4", "#f0c6a4", "#e2b08c", "#c99068"];
+const HAIR_COLORS = ["#1f1a17", "#2e2018", "#3d2a1e", "#4a2e1c", "#6b4226", "#8a5a36"];
+const JACKETS = ["#2b2b3a", "#33405e", "#4d5668", "#6b6f7a", "#9a8466", "#5a4636"];
+const TIES = ["#c0392b", "#d98aa0", "#3d6bb3", "#e8c879", "#6a8f6a"];
+const SHIRTS = ["#e8e4da", "#a9c2e0", "#d9c7a8", "#8fa8b8", "#c9b8d9"];
+const PANTS = ["#3b3a4a", "#4a5a78", "#6b5a48", "#7d8291"];
+const DRESSES = ["#e8a0b4", "#a9c8ec", "#f2d58a", "#c4b0e6", "#9cd4b8", "#f2b49a", "#8a6ab8", "#5a7ac0"];
 
-/** 같은 문자열이면 항상 같은 값 (FNV-1a) */
-export function hashSeed(text: string) {
-  let h = 0x811c9dc5;
-  for (const ch of text) {
-    h ^= ch.codePointAt(0)!;
-    h = Math.imul(h, 0x01000193);
-  }
-  return h >>> 0;
+/** 한 단계 어두운 그늘 색 */
+function shade(hex: string, amount = 0.78) {
+  const n = parseInt(hex.slice(1), 16);
+  const c = (shift: number) => Math.round(((n >> shift) & 255) * amount);
+  return `#${((c(16) << 16) | (c(8) << 8) | c(0)).toString(16).padStart(6, "0")}`;
 }
 
 /** seed에서 차례로 숫자를 뽑는 작은 난수기 (mulberry32) */
@@ -83,9 +89,12 @@ function random(seed: number) {
     a = (a + 0x6d2b79f5) | 0;
     let t = Math.imul(a ^ (a >>> 15), 1 | a);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return (((t ^ (t >>> 14)) >>> 0) % n) as number;
+    return ((t ^ (t >>> 14)) >>> 0) % n;
   };
 }
+
+/** 새 하객의 모습을 정할 seed */
+export const newSeed = () => Math.floor(Math.random() * 2 ** 32);
 
 export type GuestLook = { frames: Frames; palette: Record<string, string> };
 
@@ -93,31 +102,34 @@ export type GuestLook = { frames: Frames; palette: Record<string, string> };
 export function guestLook(seed: number, gender?: Gender): GuestLook {
   const pick = random(seed);
   const choose = <T>(list: readonly T[]) => list[pick(list.length)];
-
   const fits = <T extends { gender: Gender }>(list: T[]) => list.filter((item) => !gender || item.gender === gender);
 
-  const head = [...choose(fits(HAIRS)).rows];
-  // 4명 중 1명은 안경 (눈 위치는 모든 머리 모양에서 4·7번째 칸)
-  if (pick(4) === 0) head[3] = `${head[3].slice(0, 3)}geggeg${head[3].slice(9)}`;
-
+  const hair = choose(fits(HAIRS));
   const outfit = choose(fits(OUTFITS));
-  const frames = outfit.legs.map((legs) => [...head, ...outfit.body, ...legs]);
+  const body = [...outfit.body];
+  // 긴 머리는 어깨 위로 흘러내린다
+  if (hair.long) for (const y of [0, 1]) body[y] = `..h${body[y].slice(3, 9)}h..`;
+
+  const jacket = choose(JACKETS);
+  const shirt = choose(SHIRTS);
+  const dress = choose(DRESSES);
 
   return {
-    frames,
+    frames: outfit.legs.map((legs) => [...hair.rows, ...body, ...legs]),
     palette: {
       h: choose(HAIR_COLORS),
       s: choose(SKINS),
       e: "#222222",
       p: "#f3a0a0",
-      g: "#1a1a1a",
-      c: choose(HATS),
-      k: choose(JACKETS),
-      w: "#ffffff",
+      w: "#fbf7ef",
+      k: jacket,
+      K: shade(jacket),
       b: choose(TIES),
-      d: choose(DRESSES),
-      t: choose(KNITS),
+      t: shirt,
+      T: shade(shirt, 0.86),
       q: choose(PANTS),
+      d: dress,
+      D: shade(dress),
       n: "#3a2a20",
     },
   };
