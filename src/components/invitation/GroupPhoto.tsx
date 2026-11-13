@@ -5,7 +5,7 @@ import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Bride, Groom } from "@/components/pixel/Characters";
 import { PixelSection } from "@/components/pixel/PixelSection";
 import { PixelSprite } from "@/components/pixel/PixelSprite";
-import { guestLook, hashSeed } from "@/components/pixel/guestSprite";
+import { type Gender, guestLook, hashSeed } from "@/components/pixel/guestSprite";
 import { HEART_FRAMES, HEART_PALETTE } from "@/components/pixel/sprites";
 import { wedding } from "@/data/wedding";
 import { dialogProps, useDialog } from "@/hooks/useDialog";
@@ -92,6 +92,7 @@ function Backdrop() {
 // ── 사진 속 하객 ──
 function PhotoGuest({
   seed,
+  gender,
   name,
   slot,
   size,
@@ -99,13 +100,14 @@ function PhotoGuest({
   onArrive,
 }: {
   seed: number;
+  gender?: Gender;
   name: string;
   slot: Slot;
   size: number;
   entering: boolean;
   onArrive: () => void;
 }) {
-  const look = useMemo(() => guestLook(seed), [seed]);
+  const look = useMemo(() => guestLook(seed, gender), [seed, gender]);
   const [walking, setWalking] = useState(entering);
   const target = place(slot, size);
   // 가까운 쪽 가장자리에서 걸어 들어온다
@@ -133,19 +135,25 @@ function PhotoGuest({
 }
 
 // ── 이름 입력 창 ──
-function JoinSheet({ onCancel, onJoin }: { onCancel: () => void; onJoin: (name: string, seed: number) => void }) {
+const GENDERS: { value: Gender; label: string }[] = [
+  { value: "male", label: "남자" },
+  { value: "female", label: "여자" },
+];
+
+function JoinSheet({ onCancel, onJoin }: { onCancel: () => void; onJoin: (name: string, gender: Gender, seed: number) => void }) {
   const [name, setName] = useState("");
+  const [gender, setGender] = useState<Gender>("male");
   const [reroll, setReroll] = useState(0);
   const dialogRef = useRef<HTMLDivElement>(null);
   useDialog(dialogRef, onCancel);
 
   const trimmed = name.trim();
   const seed = hashSeed(`${trimmed}#${reroll}`);
-  const look = useMemo(() => guestLook(seed), [seed]);
+  const look = useMemo(() => guestLook(seed, gender), [seed, gender]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    if (trimmed) onJoin(trimmed, seed);
+    if (trimmed) onJoin(trimmed, gender, seed);
   };
 
   return (
@@ -176,13 +184,31 @@ function JoinSheet({ onCancel, onJoin }: { onCancel: () => void; onJoin: (name: 
           <div className="flex h-24 w-20 shrink-0 items-end justify-center border-b-4 border-line">
             <PixelSprite {...look} animated className="h-20 w-15" />
           </div>
-          <button
-            type="button"
-            onClick={() => setReroll((n) => n + 1)}
-            className="mb-1 border border-line px-3 py-1.5 text-xs text-ink"
-          >
-            다른 모습
-          </button>
+          <div className="mb-1 flex flex-col gap-3">
+            <div role="radiogroup" aria-label="성별" className="flex gap-2">
+              {GENDERS.map(({ value, label }) => (
+                <button
+                  key={value}
+                  type="button"
+                  role="radio"
+                  aria-checked={gender === value}
+                  onClick={() => setGender(value)}
+                  className={`border px-3 py-1.5 text-xs transition-colors ${
+                    gender === value ? "border-accent bg-accent text-night" : "border-line text-ink"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => setReroll((n) => n + 1)}
+              className="self-start border border-line px-3 py-1.5 text-xs text-ink"
+            >
+              다른 모습
+            </button>
+          </div>
         </div>
 
         <label className="mt-6 block">
@@ -242,10 +268,10 @@ export function GroupPhoto() {
     return () => clearTimeout(timer);
   }, [tagId]);
 
-  const onJoin = async (name: string, seed: number) => {
+  const onJoin = async (name: string, gender: Gender, seed: number) => {
     setJoining(false);
     photoRef.current?.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
-    const guest = await join(name, seed);
+    const guest = await join(name, gender, seed);
     if (reduceMotion) snap(guest.id);
   };
 
@@ -272,6 +298,7 @@ export function GroupPhoto() {
             <PhotoGuest
               key={guest.id}
               seed={guest.seed}
+              gender={guest.gender}
               name={guest.name}
               slot={slots[i]}
               size={size}

@@ -3,19 +3,21 @@
 
 type Frames = readonly (readonly string[])[];
 
-const HAIRS = [
+export type Gender = "male" | "female";
+
+const HAIRS: { gender: Gender; rows: string[] }[] = [
   // 짧은 머리
-  ["....hhhh....", "...hhhhhh...", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."],
+  { gender: "male", rows: ["....hhhh....", "...hhhhhh...", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."] },
   // 긴 머리
-  ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "..hsessesh..", "..hspsspsh..", "..hhsssshh.."],
+  { gender: "female", rows: ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "..hsessesh..", "..hspsspsh..", "..hhsssshh.."] },
   // 단발
-  ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "..hsessesh..", "..hspsspsh..", "...hssssh..."],
+  { gender: "female", rows: ["...hhhhhh...", "..hhhhhhhh..", "..hhsssshh..", "..hsessesh..", "..hspsspsh..", "...hssssh..."] },
   // 모자
-  ["...cccccc...", "..cccccccc..", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."],
+  { gender: "male", rows: ["...cccccc...", "..cccccccc..", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."] },
   // 까까머리
-  ["............", "....hhhh....", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."],
+  { gender: "male", rows: ["............", "....hhhh....", "...hssssh...", "...sesses...", "...spssps...", "....ssss...."] },
   // 묶은 머리
-  ["....hhhh.hh.", "...hhhhhhhh.", "...hsssshh..", "...sesses...", "...spssps...", "....ssss...."],
+  { gender: "female", rows: ["....hhhh.hh.", "...hhhhhhhh.", "...hsssshh..", "...sesses...", "...spssps...", "....ssss...."] },
 ];
 
 const PANTS_LEGS: Frames = [
@@ -28,24 +30,28 @@ const SKIRT_LEGS: Frames = [
   ["...s....s...", "...s....s...", "..nn....nn.."],
 ];
 
-const OUTFITS: { body: string[]; legs: Frames }[] = [
+const OUTFITS: { gender: Gender; body: string[]; legs: Frames }[] = [
   // 정장
   {
+    gender: "male",
     body: ["..kkkwwkkk..", ".kkkkbbkkkk.", ".kkkkbbkkkk.", ".skkkbbkkks.", "..kkkwwkkk..", "..qqqqqqqq..", "..qqq..qqq.."],
     legs: PANTS_LEGS,
   },
   // 원피스
   {
+    gender: "female",
     body: ["...dddddd...", "..dddddddd..", "..sdddddds..", "...dddddd...", "..dddddddd..", "..dddddddd..", ".dddddddddd."],
     legs: SKIRT_LEGS,
   },
   // 니트 + 바지
   {
+    gender: "male",
     body: ["..tttttttt..", ".tttttttttt.", ".tttttttttt.", ".stttttttts.", "..tttttttt..", "..qqqqqqqq..", "..qqq..qqq.."],
     legs: PANTS_LEGS,
   },
   // 블라우스 + 치마
   {
+    gender: "female",
     body: ["..wwwbbwww..", ".wwwwwwwwww.", ".swwwwwwwws.", "...dddddd...", "..dddddddd..", "..dddddddd..", ".dddddddddd."],
     legs: SKIRT_LEGS,
   },
@@ -83,15 +89,18 @@ function random(seed: number) {
 
 export type GuestLook = { frames: Frames; palette: Record<string, string> };
 
-export function guestLook(seed: number): GuestLook {
+/** gender가 없으면(성별을 고르기 전에 저장된 하객) 모든 모양에서 고른다 */
+export function guestLook(seed: number, gender?: Gender): GuestLook {
   const pick = random(seed);
   const choose = <T>(list: readonly T[]) => list[pick(list.length)];
 
-  const head = [...choose(HAIRS)];
+  const fits = <T extends { gender: Gender }>(list: T[]) => list.filter((item) => !gender || item.gender === gender);
+
+  const head = [...choose(fits(HAIRS)).rows];
   // 4명 중 1명은 안경 (눈 위치는 모든 머리 모양에서 4·7번째 칸)
   if (pick(4) === 0) head[3] = `${head[3].slice(0, 3)}geggeg${head[3].slice(9)}`;
 
-  const outfit = choose(OUTFITS);
+  const outfit = choose(fits(OUTFITS));
   const frames = outfit.legs.map((legs) => [...head, ...outfit.body, ...legs]);
 
   return {

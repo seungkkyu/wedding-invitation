@@ -2,7 +2,9 @@
 // 지금은 이 브라우저에만 저장한다. 백엔드가 생기면 이 파일의 두 함수만 API 호출로 바꾸면 된다
 // (그래서 처음부터 Promise를 돌려준다).
 
-export type Guest = { id: string; name: string; seed: number; joinedAt: number };
+import type { Gender } from "@/components/pixel/guestSprite";
+
+export type Guest = { id: string; name: string; gender?: Gender; seed: number; joinedAt: number };
 
 export const GUEST_NAME_MAX = 6;
 
@@ -21,10 +23,11 @@ export async function loadGuests(): Promise<Guest[]> {
   return read();
 }
 
-export async function addGuest(name: string, seed: number): Promise<Guest> {
+export async function addGuest(name: string, gender: Gender, seed: number): Promise<Guest> {
   const guest: Guest = {
     id: crypto.randomUUID(),
     name: name.trim().slice(0, GUEST_NAME_MAX),
+    gender,
     seed,
     joinedAt: Date.now(),
   };
