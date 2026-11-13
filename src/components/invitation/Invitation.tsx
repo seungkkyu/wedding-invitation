@@ -6,6 +6,7 @@ import { Cover } from "./Cover";
 import { Farewell } from "./Farewell";
 import { Gallery } from "./Gallery";
 import { Greeting } from "./Greeting";
+import { GroupPhoto } from "./GroupPhoto";
 import { Location } from "./Location";
 import { Share } from "./Share";
 import { Story } from "./Story";
@@ -21,6 +22,7 @@ export function Invitation() {
       <Contact />
       <Account />
       <Farewell />
+      <GroupPhoto />
       <Share />
       <Bgm />
       {/* 하단 플로팅 버튼 + 전체화면 시트 */}
